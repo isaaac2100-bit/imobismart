@@ -1,0 +1,1618 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ImobiSmart – Imobiliária São Jorge</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #f7f5f2;
+      --fg:       #1a1f2e;
+      --card:     #ffffff;
+      --primary:  #1c3557;
+      --accent:   #b8802a;
+      --muted:    #e8e4de;
+      --muted-fg: #7a7060;
+      --border:   rgba(26,31,46,0.10);
+      --radius:   10px;
+    }
+
+    body { font-family:'Outfit',sans-serif; background:var(--bg); color:var(--fg); min-height:100vh; font-size:14px; }
+
+    ::-webkit-scrollbar { width:5px; height:5px; }
+    ::-webkit-scrollbar-track { background:transparent; }
+    ::-webkit-scrollbar-thumb { background:rgba(0,0,0,.15); border-radius:4px; }
+
+    .serif { font-family:'Fraunces',serif; }
+    .hidden { display:none !important; }
+    .truncate { overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+
+    /* ── Login ── */
+    #login-screen { display:flex; min-height:100vh; }
+    .login-hero { flex:0 0 52%; position:relative; display:flex; flex-direction:column; background:#0f2033; }
+    .login-hero img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+    .login-hero-overlay { position:absolute; inset:0; background:linear-gradient(135deg,rgba(15,32,51,.92) 0%,rgba(28,53,87,.72) 60%,rgba(28,53,87,.18) 100%); }
+    .login-hero-content { position:relative; z-index:1; display:flex; flex-direction:column; justify-content:space-between; height:100%; padding:48px; }
+    .brand { display:flex; align-items:center; gap:12px; }
+    .brand-icon { width:40px; height:40px; background:var(--accent); border-radius:12px; display:flex; align-items:center; justify-content:center; }
+    .brand-icon svg { width:20px; height:20px; color:#fff; fill:none; stroke:#fff; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    .brand-name { color:#fff; font-size:20px; font-family:'Fraunces',serif; font-weight:600; line-height:1; }
+    .brand-sub  { color:rgba(255,255,255,.45); font-size:11px; margin-top:3px; }
+    .hero-pill { display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.20); border-radius:999px; padding:6px 14px; color:rgba(255,255,255,.70); font-size:11px; margin-bottom:16px; }
+    .hero-pill-dot { width:7px; height:7px; border-radius:50%; background:var(--accent); animation:pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1}50%{opacity:.4} }
+    .hero-headline { color:#fff; font-size:2.1rem; font-family:'Fraunces',serif; font-weight:600; line-height:1.15; margin-bottom:16px; }
+    .hero-sub { color:rgba(255,255,255,.60); font-size:14px; line-height:1.6; margin-bottom:24px; }
+    .hero-stats { display:flex; gap:32px; }
+    .hero-stat-n { color:#fff; font-size:24px; font-family:'Fraunces',serif; font-weight:700; }
+    .hero-stat-l { color:rgba(255,255,255,.50); font-size:11px; }
+    .login-form-wrap { flex:1; display:flex; align-items:center; justify-content:center; padding:48px 32px; }
+    .login-form { width:100%; max-width:420px; }
+    .login-title { font-size:1.75rem; font-family:'Fraunces',serif; font-weight:600; margin-bottom:4px; }
+    .login-sub   { color:var(--muted-fg); font-size:13px; margin-bottom:32px; }
+    .field-label { display:block; font-size:11px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; margin-bottom:6px; color:var(--fg); }
+    input[type=email], input[type=password] { width:100%; padding:12px 16px; border:1px solid var(--border); border-radius:8px; background:#fff; font-family:'Outfit',sans-serif; font-size:13px; color:var(--fg); outline:none; transition:border-color .2s, box-shadow .2s; }
+    input[type=email]:focus, input[type=password]:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(28,53,87,.10); }
+    .role-grid { display:grid; grid-template-columns:1fr; gap:8px; margin-bottom:4px; }
+    .role-card { display:flex; align-items:center; gap:12px; padding:12px 16px; border:1px solid var(--border); border-radius:12px; background:#fff; cursor:pointer; text-align:left; transition:border-color .2s, background .2s; }
+    .role-card:hover { border-color:rgba(28,53,87,.35); }
+    .role-card.active { background:var(--primary); border-color:var(--primary); }
+    .role-icon { width:32px; height:32px; border-radius:8px; background:var(--muted); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .role-card.active .role-icon { background:rgba(255,255,255,.15); }
+    .role-icon svg { width:16px; height:16px; stroke:var(--muted-fg); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    .role-card.active .role-icon svg { stroke:#fff; }
+    .role-name { font-size:13px; font-weight:600; color:var(--fg); line-height:1.2; }
+    .role-card.active .role-name { color:#fff; }
+    .role-desc { font-size:11px; color:var(--muted-fg); }
+    .role-card.active .role-desc { color:rgba(255,255,255,.60); }
+    .role-check { margin-left:auto; width:16px; height:16px; border-radius:50%; background:var(--accent); display:flex; align-items:center; justify-content:center; flex-shrink:0; opacity:0; transition:opacity .2s; }
+    .role-card.active .role-check { opacity:1; }
+    .role-check svg { width:10px; height:10px; stroke:#fff; fill:none; stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round; }
+    .form-row { margin-bottom:16px; }
+    .form-footer { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; font-size:12px; }
+    .form-footer label { display:flex; align-items:center; gap:6px; cursor:pointer; color:var(--muted-fg); }
+    .form-footer a { color:var(--accent); text-decoration:none; font-weight:500; }
+    .form-footer a:hover { text-decoration:underline; }
+    .btn-primary { width:100%; padding:13px; background:var(--primary); color:#fff; border:none; border-radius:8px; font-family:'Outfit',sans-serif; font-size:14px; font-weight:600; cursor:pointer; transition:background .2s, transform .1s; box-shadow:0 1px 4px rgba(28,53,87,.20); }
+    .btn-primary:hover { background:#162d4a; }
+    .btn-primary:active { transform:scale(.99); }
+    .btn-accent { display:inline-flex; align-items:center; gap:6px; padding:8px 16px; background:var(--accent); color:#fff; border:none; border-radius:8px; font-family:'Outfit',sans-serif; font-size:12px; font-weight:600; cursor:pointer; transition:background .2s; white-space:nowrap; }
+    .btn-accent:hover { background:#a37226; }
+    .btn-ghost { display:inline-flex; align-items:center; gap:4px; padding:8px 16px; background:#fff; color:var(--fg); border:1px solid var(--border); border-radius:8px; font-family:'Outfit',sans-serif; font-size:13px; font-weight:500; cursor:pointer; transition:border-color .2s; }
+    .btn-ghost:hover { border-color:rgba(28,53,87,.35); }
+    .btn-danger { display:inline-flex; align-items:center; gap:4px; padding:8px 16px; background:#dc2626; color:#fff; border:1px solid #dc2626; border-radius:8px; font-family:'Outfit',sans-serif; font-size:13px; font-weight:600; cursor:pointer; transition:background .2s; }
+    .btn-danger:hover { background:#b91c1c; }
+    .btn-icon { width:28px; height:28px; border:none; background:transparent; border-radius:7px; display:inline-flex; align-items:center; justify-content:center; cursor:pointer; transition:background .15s; padding:0; }
+    .btn-icon:hover { background:var(--muted); }
+    .btn-icon svg { width:14px; height:14px; stroke:var(--muted-fg); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    .btn-icon.danger:hover { background:#fee2e2; }
+    .btn-icon.danger svg { stroke:#f87171; }
+
+    /* ── App Shell ── */
+    #app-shell { display:flex; height:100vh; overflow:hidden; }
+    #sidebar { width:224px; flex-shrink:0; background:var(--primary); display:flex; flex-direction:column; height:100%; }
+    .sb-logo { padding:20px; border-bottom:1px solid rgba(255,255,255,.10); display:flex; align-items:center; gap:10px; }
+    .sb-logo-icon { width:32px; height:32px; background:var(--accent); border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .sb-logo-icon svg { width:16px; height:16px; stroke:#fff; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    .sb-logo-name { color:#fff; font-size:15px; font-family:'Fraunces',serif; font-weight:600; line-height:1.1; }
+    .sb-logo-sub  { color:rgba(255,255,255,.40); font-size:10px; }
+    .sb-role-chip { margin:12px 12px 4px; background:rgba(255,255,255,.08); border-radius:8px; padding:8px 12px; display:flex; align-items:center; gap:8px; }
+    .sb-role-chip svg { width:14px; height:14px; stroke:var(--accent); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; }
+    .sb-role-chip span { color:rgba(255,255,255,.60); font-size:11px; }
+    .sb-nav { flex:1; padding:8px 12px; display:flex; flex-direction:column; gap:2px; overflow-y:auto; }
+    .nav-item { display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:8px; cursor:pointer; border:none; background:transparent; color:rgba(255,255,255,.55); font-family:'Outfit',sans-serif; font-size:12px; width:100%; text-align:left; transition:background .15s, color .15s; }
+    .nav-item:hover { background:rgba(255,255,255,.08); color:rgba(255,255,255,.85); }
+    .nav-item.active { background:rgba(255,255,255,.15); color:#fff; font-weight:500; }
+    .nav-item svg { width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; }
+    .nav-dot { width:6px; height:6px; border-radius:50%; background:var(--accent); margin-left:auto; flex-shrink:0; }
+    .sb-user { padding:12px; border-top:1px solid rgba(255,255,255,.10); }
+    .sb-user-row { display:flex; align-items:center; gap:10px; padding:4px 8px 10px; }
+    .sb-avatar { width:28px; height:28px; border-radius:50%; background:rgba(184,128,42,.25); border:1px solid rgba(184,128,42,.40); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:10px; font-weight:700; color:#e0a44a; }
+    .sb-user-name { color:#fff; font-size:11px; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .btn-logout { display:flex; align-items:center; gap:8px; width:100%; padding:8px 12px; border:none; border-radius:8px; background:transparent; cursor:pointer; color:rgba(255,255,255,.45); font-family:'Outfit',sans-serif; font-size:12px; transition:background .15s, color .15s; }
+    .btn-logout:hover { background:rgba(255,255,255,.08); color:rgba(255,255,255,.75); }
+    .btn-logout svg { width:14px; height:14px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+
+    /* ── Main ── */
+    #main { flex:1; display:flex; flex-direction:column; overflow:hidden; min-width:0; }
+    #header { height:56px; background:#fff; border-bottom:1px solid var(--border); display:flex; align-items:center; padding:0 24px; gap:16px; flex-shrink:0; }
+    #header-title { font-family:'Fraunces',serif; font-size:15px; font-weight:600; white-space:nowrap; }
+    .header-search { flex:1; max-width:280px; position:relative; margin-left:8px; }
+    .header-search input { padding:6px 12px 6px 32px; border-radius:8px; background:rgba(232,228,222,.6); border:1px solid var(--border); font-size:12px; width:100%; font-family:'Outfit',sans-serif; outline:none; transition:border-color .2s; }
+    .header-search input:focus { border-color:rgba(28,53,87,.3); background:#fff; }
+    .header-search svg { position:absolute; left:10px; top:50%; transform:translateY(-50%); width:14px; height:14px; stroke:var(--muted-fg); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    .header-right { margin-left:auto; display:flex; align-items:center; gap:8px; }
+    .notif-btn { position:relative; width:32px; height:32px; border:none; background:transparent; border-radius:8px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background .15s; }
+    .notif-btn:hover { background:var(--muted); }
+    .notif-btn svg { width:16px; height:16px; stroke:var(--muted-fg); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    .notif-dot { position:absolute; top:6px; right:6px; width:6px; height:6px; border-radius:50%; background:var(--accent); }
+    .header-avatar { width:28px; height:28px; border-radius:50%; background:var(--primary); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#fff; }
+    #content { flex:1; overflow-y:auto; padding:24px; }
+
+    /* ── KPI ── */
+    .kpi-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:16px; margin-bottom:20px; }
+    .kpi-card { background:#fff; border:1px solid var(--border); border-radius:var(--radius); padding:20px; display:flex; flex-direction:column; gap:12px; }
+    .kpi-card.gold { border-color:rgba(184,128,42,.25); }
+    .kpi-top { display:flex; align-items:flex-start; justify-content:space-between; }
+    .kpi-label { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:.06em; color:var(--muted-fg); }
+    .kpi-icon { width:32px; height:32px; border-radius:8px; background:var(--muted); display:flex; align-items:center; justify-content:center; }
+    .kpi-icon.gold { background:rgba(184,128,42,.12); }
+    .kpi-icon svg { width:16px; height:16px; stroke:rgba(26,31,46,.60); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    .kpi-icon.gold svg { stroke:var(--accent); }
+    .kpi-value { font-size:24px; font-family:'Fraunces',serif; font-weight:700; color:var(--fg); }
+    .kpi-sub { font-size:11px; color:#16a34a; font-weight:500; margin-top:2px; }
+
+    /* ── Charts ── */
+    .chart-grid { display:grid; grid-template-columns:2fr 1fr; gap:16px; margin-bottom:20px; }
+    .chart-card { background:#fff; border:1px solid var(--border); border-radius:var(--radius); padding:20px; }
+    .chart-card h3 { font-family:'Fraunces',serif; font-size:14px; font-weight:600; margin-bottom:2px; }
+    .chart-card p  { font-size:11px; color:var(--muted-fg); margin-bottom:16px; }
+    .chart-legend { display:flex; gap:20px; margin-top:12px; }
+    .legend-item { display:flex; align-items:center; gap:6px; font-size:11px; color:var(--muted-fg); }
+    .legend-dot { width:12px; height:12px; border-radius:3px; flex-shrink:0; }
+    .pie-legend { margin-top:8px; display:flex; flex-direction:column; gap:8px; }
+    .pie-legend-item { display:flex; align-items:center; justify-content:space-between; }
+    .pie-legend-left { display:flex; align-items:center; gap:8px; font-size:11px; color:var(--muted-fg); }
+    .pie-legend-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+    .pie-legend-val { font-size:11px; font-weight:600; color:var(--fg); }
+
+    /* ── Table ── */
+    .table-card { background:#fff; border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; }
+    .table-header { display:flex; align-items:center; justify-content:space-between; padding:14px 20px; border-bottom:1px solid var(--border); }
+    .table-header h3 { font-family:'Fraunces',serif; font-size:14px; font-weight:600; }
+    .table-header span { font-size:11px; color:var(--muted-fg); }
+    table { width:100%; border-collapse:collapse; font-size:13px; }
+    thead tr { border-bottom:1px solid var(--border); background:rgba(232,228,222,.40); }
+    thead th { padding:10px 16px; text-align:left; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--muted-fg); white-space:nowrap; }
+    tbody tr { border-bottom:1px solid var(--border); transition:background .12s; }
+    tbody tr:last-child { border-bottom:none; }
+    tbody tr:hover { background:rgba(232,228,222,.25); }
+    tbody td { padding:13px 16px; vertical-align:middle; }
+    .client-cell { display:flex; align-items:center; gap:10px; }
+    .client-avatar { width:32px; height:32px; border-radius:50%; background:rgba(28,53,87,.10); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:12px; font-weight:700; color:var(--primary); }
+    .client-name { font-weight:500; color:var(--fg); line-height:1.2; }
+    .client-email { font-size:11px; color:var(--muted-fg); }
+    .text-muted { color:var(--muted-fg); }
+    .text-primary-bold { font-family:'Fraunces',serif; font-weight:700; color:var(--primary); }
+    .td-actions { display:flex; gap:2px; justify-content:flex-end; }
+    .empty-row td { padding:48px; text-align:center; color:var(--muted-fg); }
+
+    /* ── Badges ── */
+    .badge { display:inline-flex; align-items:center; padding:3px 10px; border-radius:999px; font-size:11px; font-weight:500; border:1px solid; white-space:nowrap; }
+    .badge-green  { background:#f0fdf4; color:#15803d; border-color:#bbf7d0; }
+    .badge-amber  { background:#fffbeb; color:#b45309; border-color:#fde68a; }
+    .badge-blue   { background:#eff6ff; color:#1d4ed8; border-color:#bfdbfe; }
+    .badge-violet { background:#f5f3ff; color:#6d28d9; border-color:#ddd6fe; }
+    .badge-red    { background:#fef2f2; color:#b91c1c; border-color:#fecaca; }
+    .badge-sky    { background:#f0f9ff; color:#0369a1; border-color:#bae6fd; }
+    .badge-gray   { background:#f9fafb; color:#6b7280; border-color:#e5e7eb; }
+
+    /* ── Filter bar ── */
+    .filter-bar { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:16px; }
+    .filter-pills { display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+    .pill { padding:6px 12px; border-radius:8px; font-size:11px; font-weight:500; border:1px solid var(--border); background:#fff; color:var(--fg); cursor:pointer; transition:all .15s; }
+    .pill:hover { border-color:rgba(28,53,87,.35); }
+    .pill.active { background:var(--primary); color:#fff; border-color:var(--primary); }
+
+    /* ── Imóveis grid ── */
+    .imoveis-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px; }
+    .imovel-card { background:#fff; border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; transition:box-shadow .25s; }
+    .imovel-card:hover { box-shadow:0 8px 24px rgba(0,0,0,.10); }
+    .imovel-img { position:relative; height:176px; background:var(--muted); overflow:hidden; }
+    .imovel-img img { width:100%; height:100%; object-fit:cover; transition:transform .5s; }
+    .imovel-card:hover .imovel-img img { transform:scale(1.05); }
+    .imovel-badges { position:absolute; top:12px; left:12px; }
+    .imovel-tipo  { position:absolute; top:12px; right:12px; }
+    .tipo-venda   { background:var(--primary); color:#fff; }
+    .tipo-aluguel { background:var(--accent);  color:#fff; }
+    .imovel-body { padding:16px; }
+    .imovel-title { font-family:'Fraunces',serif; font-size:14px; font-weight:600; margin-bottom:4px; line-height:1.3; }
+    .imovel-loc { display:flex; align-items:center; gap:4px; font-size:11px; color:var(--muted-fg); margin-bottom:10px; }
+    .imovel-loc svg { width:12px; height:12px; stroke:var(--muted-fg); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; }
+    .imovel-specs { display:flex; align-items:center; gap:14px; font-size:11px; color:var(--muted-fg); margin-bottom:12px; }
+    .imovel-spec { display:flex; align-items:center; gap:3px; }
+    .imovel-spec svg { width:12px; height:12px; stroke:var(--muted-fg); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    .imovel-footer { display:flex; align-items:center; justify-content:space-between; }
+    .imovel-price { font-family:'Fraunces',serif; font-size:16px; font-weight:700; color:var(--primary); }
+    .imovel-actions { display:flex; gap:2px; }
+
+    /* ── Atendimentos ── */
+    .atend-list { display:flex; flex-direction:column; gap:8px; }
+    .atend-card { background:#fff; border:1px solid var(--border); border-radius:var(--radius); padding:16px; display:flex; align-items:flex-start; gap:14px; transition:box-shadow .2s; }
+    .atend-card:hover { box-shadow:0 2px 8px rgba(0,0,0,.06); }
+    .atend-icon { flex-shrink:0; margin-top:2px; }
+    .atend-icon svg { width:16px; height:16px; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    .atend-body { flex:1; min-width:0; }
+    .atend-title { font-size:14px; font-weight:600; font-family:'Fraunces',serif; margin-bottom:2px; }
+    .atend-title span { font-weight:400; color:var(--muted-fg); font-family:'Outfit',sans-serif; }
+    .atend-sub { font-size:11px; color:var(--muted-fg); margin-bottom:4px; }
+    .atend-obs { font-size:11px; color:rgba(122,112,96,.75); font-style:italic; }
+    .atend-meta { flex-shrink:0; text-align:right; font-size:11px; color:var(--muted-fg); }
+    .atend-meta .date { font-weight:500; color:var(--fg); margin-bottom:2px; }
+
+    /* ── Banners ── */
+    .banner-blue { background:#eff6ff; border:1px solid #bfdbfe; border-radius:var(--radius); padding:12px 16px; display:flex; align-items:flex-start; gap:8px; font-size:12px; color:#1e3a5f; margin-bottom:12px; }
+    .banner-blue svg { width:14px; height:14px; stroke:#3b82f6; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; margin-top:1px; }
+    .banner-amber { background:#fffbeb; border:1px solid #fde68a; border-radius:var(--radius); padding:12px 16px; display:flex; align-items:flex-start; gap:8px; font-size:12px; color:#92400e; }
+    .banner-amber svg { width:14px; height:14px; stroke:#d97706; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; margin-top:1px; }
+
+    /* ── Access denied ── */
+    .access-denied { display:flex; flex-direction:column; align-items:center; justify-content:center; height:280px; gap:12px; text-align:center; }
+    .access-denied-icon { width:56px; height:56px; border-radius:50%; background:#fef2f2; display:flex; align-items:center; justify-content:center; }
+    .access-denied-icon svg { width:24px; height:24px; stroke:#f87171; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    .access-denied h3 { font-family:'Fraunces',serif; font-size:16px; font-weight:600; }
+    .access-denied p  { font-size:13px; color:var(--muted-fg); max-width:280px; }
+
+    /* ── Search wrap ── */
+    .search-wrap { position:relative; }
+    .search-wrap input { padding-left:34px; }
+    .search-wrap svg { position:absolute; left:10px; top:50%; transform:translateY(-50%); width:14px; height:14px; stroke:var(--muted-fg); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+
+    /* ── Portal cliente ── */
+    .portal-banner { background:linear-gradient(to right,var(--primary),#274a75); border-radius:var(--radius); padding:20px; color:#fff; margin-bottom:20px; }
+    .portal-banner .small { color:rgba(255,255,255,.60); font-size:11px; margin-bottom:4px; }
+    .portal-banner h2 { font-family:'Fraunces',serif; font-size:18px; font-weight:600; margin-bottom:2px; }
+    .portal-banner .sub { color:rgba(255,255,255,.60); font-size:12px; }
+
+    /* ══ MODAL ══ */
+    #modal-overlay {
+      position:fixed; inset:0; background:rgba(0,0,0,.45);
+      backdrop-filter:blur(4px); z-index:50;
+      display:flex; align-items:center; justify-content:center; padding:16px;
+    }
+    #modal-overlay.hidden { display:none; }
+    #modal-box {
+      background:#fff; border-radius:20px; box-shadow:0 20px 60px rgba(0,0,0,.20);
+      width:100%; max-width:580px; max-height:90vh; overflow-y:auto;
+      display:flex; flex-direction:column;
+    }
+    #modal-header {
+      padding:20px 24px 16px; border-bottom:1px solid var(--border);
+      display:flex; align-items:flex-start; justify-content:space-between;
+      position:sticky; top:0; background:#fff; z-index:1;
+    }
+    #modal-title { font-family:'Fraunces',serif; font-size:17px; font-weight:600; }
+    #modal-sub { font-size:12px; color:var(--muted-fg); margin-top:2px; }
+    #modal-body { padding:20px 24px; }
+    #modal-footer { padding:14px 24px; border-top:1px solid var(--border); display:flex; justify-content:flex-end; gap:8px; position:sticky; bottom:0; background:#fff; }
+    .modal-close-btn { width:28px; height:28px; border:none; background:transparent; border-radius:8px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background .15s; flex-shrink:0; margin-left:16px; }
+    .modal-close-btn:hover { background:var(--muted); }
+    .modal-close-btn svg { width:16px; height:16px; stroke:var(--muted-fg); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+
+    /* ══ CONFIRM DIALOG ══ */
+    #confirm-overlay {
+      position:fixed; inset:0; background:rgba(0,0,0,.50);
+      backdrop-filter:blur(4px); z-index:60;
+      display:flex; align-items:center; justify-content:center; padding:16px;
+    }
+    #confirm-overlay.hidden { display:none; }
+    #confirm-box { background:#fff; border-radius:20px; box-shadow:0 20px 60px rgba(0,0,0,.20); width:100%; max-width:360px; padding:28px 24px; text-align:center; }
+    .confirm-icon { width:48px; height:48px; border-radius:50%; background:#fef2f2; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; }
+    .confirm-icon svg { width:22px; height:22px; stroke:#f87171; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    #confirm-title { font-family:'Fraunces',serif; font-size:17px; font-weight:600; margin-bottom:8px; }
+    #confirm-msg { font-size:13px; color:var(--muted-fg); line-height:1.55; margin-bottom:24px; }
+    .confirm-actions { display:flex; gap:8px; justify-content:center; }
+
+    /* ══ TOAST ══ */
+    #toast-container { position:fixed; bottom:24px; right:24px; z-index:100; display:flex; flex-direction:column; gap:8px; pointer-events:none; }
+    .toast { display:flex; align-items:center; gap:10px; padding:12px 16px; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,.14); font-size:13px; font-weight:500; pointer-events:auto; animation:slideIn .2s ease; min-width:220px; max-width:360px; }
+    @keyframes slideIn { from{transform:translateX(16px);opacity:0} to{transform:translateX(0);opacity:1} }
+    .toast-success { background:#f0fdf4; color:#15803d; border:1px solid #bbf7d0; }
+    .toast-error   { background:#fef2f2; color:#b91c1c; border:1px solid #fecaca; }
+    .toast-info    { background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; }
+    .toast-default { background:#fff;    color:var(--fg); border:1px solid var(--border); }
+    .toast svg { width:16px; height:16px; flex-shrink:0; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    .toast-success svg { stroke:#16a34a; }
+    .toast-error   svg { stroke:#dc2626; }
+    .toast-info    svg { stroke:#2563eb; }
+    .toast-default svg { stroke:var(--muted-fg); }
+
+    /* ══ FORMS ══ */
+    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px 16px; }
+    .form-grid .col-2 { grid-column:1/-1; }
+    .form-field label { display:block; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--muted-fg); margin-bottom:6px; }
+    .form-input { width:100%; padding:9px 12px; border:1px solid var(--border); border-radius:8px; font-family:'Outfit',sans-serif; font-size:13px; color:var(--fg); background:#fff; outline:none; transition:border-color .2s, box-shadow .2s; }
+    .form-input:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(28,53,87,.10); }
+    textarea.form-input { min-height:68px; resize:vertical; }
+
+    /* ══ DETAIL VIEW ══ */
+    .detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    .detail-item label { display:block; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--muted-fg); margin-bottom:3px; }
+    .detail-item span { font-size:13px; font-weight:500; }
+    .detail-item .big { font-family:'Fraunces',serif; font-size:18px; font-weight:700; color:var(--primary); }
+    .detail-img { width:100%; height:192px; object-fit:cover; border-radius:12px; margin-bottom:20px; }
+    .detail-badges { display:flex; gap:8px; margin-bottom:16px; }
+
+    /* ── Responsive ── */
+    @media(max-width:900px) {
+      .login-hero { display:none; }
+      .chart-grid { grid-template-columns:1fr; }
+    }
+    @media(max-width:640px) {
+      #sidebar { width:0; overflow:hidden; }
+      .imoveis-grid { grid-template-columns:1fr; }
+      .form-grid { grid-template-columns:1fr; }
+      .form-grid .col-2 { grid-column:1; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<!-- ═══ MODAL ═══ -->
+<div id="modal-overlay" class="hidden" onclick="if(event.target===this)closeModal()">
+  <div id="modal-box">
+    <div id="modal-header">
+      <div>
+        <div id="modal-title"></div>
+        <div id="modal-sub"></div>
+      </div>
+      <button class="modal-close-btn" onclick="closeModal()">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div id="modal-body"></div>
+    <div id="modal-footer"></div>
+  </div>
+</div>
+
+<!-- ═══ CONFIRM DIALOG ═══ -->
+<div id="confirm-overlay" class="hidden" onclick="if(event.target===this)closeConfirm()">
+  <div id="confirm-box">
+    <div class="confirm-icon">
+      <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    </div>
+    <div id="confirm-title" class="serif">Confirmar exclusão</div>
+    <div id="confirm-msg"></div>
+    <div class="confirm-actions">
+      <button class="btn-ghost" onclick="closeConfirm()">Cancelar</button>
+      <button class="btn-danger" onclick="confirmYes()">Excluir</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TOAST CONTAINER ═══ -->
+<div id="toast-container"></div>
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   DATA
+═══════════════════════════════════════════════════════ */
+let _nextId = 200;
+
+const DATA = {
+  negMensal:     [{mes:"Jan",fechadas:4,andamento:7},{mes:"Fev",fechadas:6,andamento:9},{mes:"Mar",fechadas:5,andamento:8},{mes:"Abr",fechadas:8,andamento:11},{mes:"Mai",fechadas:7,andamento:10},{mes:"Jun",fechadas:11,andamento:13},{mes:"Jul",fechadas:9,andamento:15}],
+  corretorStats: [{mes:"Abr",atend:12,neg:3},{mes:"Mai",atend:16,neg:4},{mes:"Jun",atend:14,neg:5},{mes:"Jul",atend:18,neg:6}],
+  funcStats:     [{mes:"Abr",cadastros:8,atend:22},{mes:"Mai",cadastros:11,atend:31},{mes:"Jun",cadastros:9,atend:28},{mes:"Jul",cadastros:14,atend:35}],
+  statusPie:     [{name:"Disponível",value:68,color:"#2d7a4f"},{name:"Em Negociação",value:18,color:"#b8802a"},{name:"Vendido",value:24,color:"#1c3557"},{name:"Alugado",value:17,color:"#7c3aed"}],
+  imoveis: [
+    {id:1,titulo:"Casa em Condomínio Fechado", bairro:"Centro",      cidade:"Verdelândia",tipo:"Venda",  preco:320000,quartos:4,banheiros:3,vagas:2,area:320,status:"Disponível",    foto:"https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=480&h=320&fit=crop&auto=format"},
+    {id:2,titulo:"Casa Residencial Ampla",     bairro:"Bairro Novo", cidade:"Porteirinha", tipo:"Venda",  preco:210000,quartos:3,banheiros:2,vagas:2,area:145,status:"Disponível",    foto:"https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=480&h=320&fit=crop&auto=format"},
+    {id:3,titulo:"Chácara com Área Verde",     bairro:"Zona Rural",  cidade:"Verdelândia",tipo:"Venda",  preco:580000,quartos:4,banheiros:4,vagas:3,area:480,status:"Em Negociação", foto:"https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=480&h=320&fit=crop&auto=format"},
+    {id:4,titulo:"Casa para Locação",          bairro:"São José",    cidade:"Porteirinha", tipo:"Aluguel",preco:1200,  quartos:2,banheiros:1,vagas:1,area:90, status:"Disponível",    foto:"https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=480&h=320&fit=crop&auto=format"},
+    {id:5,titulo:"Sítio com Nascente",         bairro:"Zona Rural",  cidade:"Verdelândia",tipo:"Venda",  preco:950000,quartos:5,banheiros:4,vagas:4,area:520,status:"Disponível",    foto:"https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=480&h=320&fit=crop&auto=format"},
+    {id:6,titulo:"Casa com Quintal",           bairro:"Santa Luzia", cidade:"Porteirinha", tipo:"Aluguel",preco:900,   quartos:2,banheiros:2,vagas:1,area:98, status:"Alugado",       foto:"https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=480&h=320&fit=crop&auto=format"},
+  ],
+  clientes: [
+    {id:1,nome:"Maria Fernanda Costa",  email:"maria.costa@email.com",  tel:"(38) 98765-4321",tipo:"Compradora",interesse:"Casa em Verdelândia",     status:"Ativo",  cadastro:"12/06/2025",corretor:"Carlos Lima"},
+    {id:2,nome:"Ricardo Almeida",       email:"r.almeida@empresa.com",  tel:"(38) 97654-3210",tipo:"Locatário", interesse:"Casa para locação",        status:"Ativo",  cadastro:"08/06/2025",corretor:"Ana Martins"},
+    {id:3,nome:"Juliana Souza",         email:"juliana.s@gmail.com",    tel:"(38) 96543-2109",tipo:"Compradora",interesse:"Casa com quintal",          status:"Ativo",  cadastro:"01/06/2025",corretor:"Bruno Teixeira"},
+    {id:4,nome:"Carlos Eduardo Mendes",email:"carlos.mendes@invest.com",tel:"(38) 95432-1098",tipo:"Investidor",interesse:"Chácara ou sítio",          status:"Ativo",  cadastro:"28/05/2025",corretor:"Carlos Lima"},
+    {id:5,nome:"Patrícia Nunes",        email:"pnunes@hotmail.com",     tel:"(38) 94321-0987",tipo:"Compradora",interesse:"Casa em condomínio",        status:"Inativo",cadastro:"15/05/2025",corretor:"Luana Ramos"},
+    {id:6,nome:"Fernando Gomes",        email:"fgomes@outlook.com",     tel:"(38) 93210-9876",tipo:"Locatário", interesse:"Casa 2 quartos",            status:"Ativo",  cadastro:"10/05/2025",corretor:"Ana Martins"},
+  ],
+  atendimentos: [
+    {id:1,cliente:"Maria Fernanda Costa", corretor:"Carlos Lima",   imovel:"Casa Residencial – Porteirinha",  tipo:"Visita",      data:"14/07/2025",horario:"10:00",status:"Agendado", obs:"Confirmar documentação do imóvel"},
+    {id:2,cliente:"Ricardo Almeida",      corretor:"Ana Martins",   imovel:"Casa para Locação – Porteirinha", tipo:"Visita",      data:"11/07/2025",horario:"14:30",status:"Realizado",obs:"Muito interessado; pediu proposta"},
+    {id:3,cliente:"Juliana Souza",        corretor:"Bruno Teixeira",imovel:"Casa em Condomínio – Verdelândia",tipo:"Reunião",     data:"10/07/2025",horario:"09:00",status:"Realizado",obs:"Aprovação de crédito pendente"},
+    {id:4,cliente:"Carlos Eduardo Mendes",corretor:"Carlos Lima",   imovel:"Chácara – Verdelândia",           tipo:"Apresentação",data:"16/07/2025",horario:"11:00",status:"Agendado", obs:"Trazer memorial descritivo"},
+    {id:5,cliente:"Fernando Gomes",       corretor:"Luana Ramos",   imovel:"Casa com Quintal – Porteirinha",  tipo:"Visita",      data:"09/07/2025",horario:"16:00",status:"Cancelado",obs:"Remarcado para próxima semana"},
+    {id:6,cliente:"Patrícia Nunes",       corretor:"Bruno Teixeira",imovel:"Sítio – Verdelândia",             tipo:"Visita",      data:"17/07/2025",horario:"15:00",status:"Agendado", obs:""},
+  ],
+  negociacoes: [
+    {id:1,cliente:"Carlos Eduardo Mendes",corretor:"Carlos Lima",   imovel:"Chácara – Verdelândia",           valor:560000,etapa:"Em Proposta",data:"10/07/2025",tipo:"Venda"},
+    {id:2,cliente:"Maria Fernanda Costa", corretor:"Ana Martins",   imovel:"Casa Residencial – Porteirinha",  valor:205000,etapa:"Em Análise", data:"05/07/2025",tipo:"Venda"},
+    {id:3,cliente:"Ricardo Almeida",      corretor:"Luana Ramos",   imovel:"Casa para Locação – Porteirinha", valor:1200,  etapa:"Contrato",   data:"01/07/2025",tipo:"Aluguel"},
+    {id:4,cliente:"Juliana Souza",        corretor:"Bruno Teixeira",imovel:"Casa em Condomínio – Verdelândia",valor:315000,etapa:"Fechada",    data:"28/06/2025",tipo:"Venda"},
+    {id:5,cliente:"Fernando Gomes",       corretor:"Ana Martins",   imovel:"Casa com Quintal – Porteirinha",  valor:880,   etapa:"Cancelada",  data:"20/06/2025",tipo:"Aluguel"},
+  ],
+};
+
+const CORRETORES = ["Carlos Lima","Ana Martins","Bruno Teixeira","Luana Ramos"];
+
+/* ═══════════════════════════════════════════════════════
+   STATE & PERMISSIONS
+═══════════════════════════════════════════════════════ */
+let state = { loggedIn:false, role:"Administrador", section:"painel", filter:{} };
+
+const ROLE_META = {
+  "Administrador":              {icon:"shield",  desc:"Acesso completo ao sistema",         initials:"AP", name:"Ana Paula Ramos"},
+  "Corretor":                   {icon:"star",    desc:"Atendimentos e negociações próprios", initials:"CL", name:"Carlos Lima"},
+  "Funcionário Administrativo": {icon:"users",   desc:"Cadastros e atendimentos",           initials:"BT", name:"Beatriz Torres"},
+  "Cliente":                    {icon:"home",    desc:"Consulta de imóveis e agendamentos", initials:"MF", name:"Maria Fernanda Costa"},
+};
+
+const NAV_BY_ROLE = {
+  "Administrador":              [{id:"painel",          label:"Painel Geral",        icon:"dashboard"},{id:"imoveis",label:"Imóveis",icon:"building"},{id:"clientes",label:"Clientes",icon:"users"},{id:"atendimentos",label:"Atendimentos",icon:"message"},{id:"negociacoes",label:"Negociações",icon:"briefcase"}],
+  "Corretor":                   [{id:"painel",          label:"Meu Painel",          icon:"dashboard"},{id:"imoveis",label:"Imóveis",icon:"building"},{id:"clientes",label:"Meus Clientes",icon:"users"},{id:"atendimentos",label:"Meus Atendimentos",icon:"message"},{id:"negociacoes",label:"Minhas Negociações",icon:"briefcase"}],
+  "Funcionário Administrativo": [{id:"painel",          label:"Painel",              icon:"dashboard"},{id:"imoveis",label:"Imóveis",icon:"building"},{id:"clientes",label:"Clientes",icon:"users"},{id:"atendimentos",label:"Atendimentos",icon:"message"}],
+  "Cliente":                    [{id:"meus_imoveis",    label:"Buscar Imóveis",      icon:"home"},{id:"meus_agendamentos",label:"Meus Agendamentos",icon:"calendar"}],
+};
+
+const CAN = {
+  "Administrador":              {add:true, edit:true, del:true, allNeg:true, allClients:true, financial:true},
+  "Corretor":                   {add:false,edit:true, del:false,allNeg:false,allClients:false,financial:false},
+  "Funcionário Administrativo": {add:true, edit:true, del:false,allNeg:false,allClients:true, financial:false},
+  "Cliente":                    {add:false,edit:false,del:false,allNeg:false,allClients:false,financial:false},
+};
+
+/* ═══════════════════════════════════════════════════════
+   HELPERS
+═══════════════════════════════════════════════════════ */
+function fmtPreco(val, tipo) {
+  return tipo === "Aluguel"
+    ? `R$ ${val.toLocaleString("pt-BR")}/mês`
+    : `R$ ${val.toLocaleString("pt-BR")}`;
+}
+
+function toISODate(ddmmyyyy) {
+  if (!ddmmyyyy || !ddmmyyyy.includes('/')) return '';
+  const [d,m,y] = ddmmyyyy.split('/');
+  return `${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`;
+}
+function toBRDate(yyyymmdd) {
+  if (!yyyymmdd || !yyyymmdd.includes('-')) return yyyymmdd || '';
+  const [y,m,d] = yyyymmdd.split('-');
+  return `${d}/${m}/${y}`;
+}
+
+const BADGE_CLASS = {
+  "Disponível":"badge-green","Em Negociação":"badge-amber","Vendido":"badge-blue",
+  "Alugado":"badge-violet","Agendado":"badge-blue","Realizado":"badge-green",
+  "Cancelado":"badge-red","Cancelada":"badge-red","Em Proposta":"badge-amber",
+  "Em Análise":"badge-sky","Contrato":"badge-violet","Fechada":"badge-green",
+  "Ativo":"badge-green","Inativo":"badge-gray",
+};
+function badge(s) { return `<span class="badge ${BADGE_CLASS[s]||'badge-gray'}">${s}</span>`; }
+
+function esc(str) { return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+/* SVG icons */
+const ICONS = {
+  building:`<svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="18" rx="1"/><path d="M9 22V12H15V22"/><path d="M9 7H9.01M12 7H12.01M15 7H15.01M9 12H9.01M15 12H15.01"/></svg>`,
+  users:`<svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
+  message:`<svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`,
+  briefcase:`<svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16M2 12h20"/></svg>`,
+  dashboard:`<svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>`,
+  home:`<svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M9 22V12H15V22"/></svg>`,
+  calendar:`<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,
+  shield:`<svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
+  star:`<svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
+  logout:`<svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>`,
+  search:`<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`,
+  bell:`<svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>`,
+  plus:`<svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`,
+  eye:`<svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`,
+  edit:`<svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`,
+  trash:`<svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>`,
+  mappin:`<svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`,
+  bed:`<svg viewBox="0 0 24 24"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></svg>`,
+  bath:`<svg viewBox="0 0 24 24"><path d="M9 6 8 7"/><path d="M2 14h20v4a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-4z"/><path d="M2 14V6a4 4 0 0 1 8 0v8"/></svg>`,
+  car:`<svg viewBox="0 0 24 24"><rect x="2" y="11" width="20" height="9" rx="2"/><path d="M5 11 7 5h10l2 6"/><circle cx="7" cy="17" r="1"/><circle cx="17" cy="17" r="1"/></svg>`,
+  lock:`<svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`,
+  check:`<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>`,
+  clock:`<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
+  x:`<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`,
+  info:`<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
+  trending:`<svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>`,
+};
+
+/* ═══════════════════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════════════════ */
+const TOAST_ICONS = {
+  success:`<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:#16a34a;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><polyline points="20 6 9 17 4 12"/></svg>`,
+  error:`<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:#dc2626;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`,
+  info:`<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:#2563eb;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
+  default:`<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:#7a7060;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><circle cx="12" cy="12" r="10"/></svg>`,
+};
+function showToast(msg, type='success') {
+  const container = document.getElementById('toast-container');
+  const el = document.createElement('div');
+  el.className = `toast toast-${type}`;
+  el.innerHTML = `${TOAST_ICONS[type]||''}${msg}`;
+  container.appendChild(el);
+  setTimeout(() => {
+    el.style.transition = 'opacity .3s, transform .3s';
+    el.style.opacity = '0';
+    el.style.transform = 'translateX(16px)';
+    setTimeout(() => el.remove(), 300);
+  }, 3000);
+}
+
+/* ═══════════════════════════════════════════════════════
+   MODAL
+═══════════════════════════════════════════════════════ */
+let _editing = null; // { type, id }
+
+function openModal(cfg) {
+  document.getElementById('modal-title').textContent = cfg.title || '';
+  const sub = document.getElementById('modal-sub');
+  sub.textContent = cfg.sub || '';
+  sub.style.display = cfg.sub ? 'block' : 'none';
+  document.getElementById('modal-body').innerHTML = cfg.body || '';
+  document.getElementById('modal-footer').innerHTML = cfg.footer || '';
+  document.getElementById('modal-overlay').classList.remove('hidden');
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.add('hidden');
+  _editing = null;
+}
+
+/* ═══════════════════════════════════════════════════════
+   CONFIRM DIALOG
+═══════════════════════════════════════════════════════ */
+let _confirmCb = null;
+
+function openConfirm(msg, cb) {
+  document.getElementById('confirm-msg').textContent = msg;
+  _confirmCb = cb;
+  document.getElementById('confirm-overlay').classList.remove('hidden');
+}
+
+function confirmYes() {
+  if (_confirmCb) _confirmCb();
+  closeConfirm();
+}
+
+function closeConfirm() {
+  document.getElementById('confirm-overlay').classList.add('hidden');
+  _confirmCb = null;
+}
+
+/* ═══════════════════════════════════════════════════════
+   CHARTS
+═══════════════════════════════════════════════════════ */
+let charts = {};
+function destroyChart(id) { if(charts[id]){ charts[id].destroy(); delete charts[id]; } }
+
+function initCharts() {
+  setTimeout(() => {
+    const role = state.role;
+    const barEl = document.getElementById('barChart');
+    if (barEl) {
+      destroyChart('bar');
+      let data, labels, ds1, ds2, l1, l2;
+      if(role==='Administrador'){data=DATA.negMensal;labels=data.map(d=>d.mes);ds1=data.map(d=>d.fechadas);ds2=data.map(d=>d.andamento);l1='Fechadas';l2='Em andamento';}
+      else if(role==='Corretor'){data=DATA.corretorStats;labels=data.map(d=>d.mes);ds1=data.map(d=>d.atend);ds2=data.map(d=>d.neg);l1='Atendimentos';l2='Negociações';}
+      else{data=DATA.funcStats;labels=data.map(d=>d.mes);ds1=data.map(d=>d.cadastros);ds2=data.map(d=>d.atend);l1='Cadastros';l2='Atendimentos';}
+      charts['bar'] = new Chart(barEl, {
+        type:'bar',
+        data:{labels,datasets:[
+          {label:l1,data:ds1,backgroundColor:'#1c3557',borderRadius:4},
+          {label:l2,data:ds2,backgroundColor:'#b8802a',borderRadius:4},
+        ]},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.parsed.y}`}}},scales:{x:{grid:{display:false},ticks:{font:{family:'Outfit',size:11},color:'#9ca3af'}},y:{grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{family:'Outfit',size:11},color:'#9ca3af'}}}}
+      });
+    }
+    const pieEl = document.getElementById('pieChart');
+    if (pieEl) {
+      destroyChart('pie');
+      charts['pie'] = new Chart(pieEl, {
+        type:'doughnut',
+        data:{labels:DATA.statusPie.map(d=>d.name),datasets:[{data:DATA.statusPie.map(d=>d.value),backgroundColor:DATA.statusPie.map(d=>d.color),borderWidth:2,borderColor:'#fff',hoverOffset:4}]},
+        options:{responsive:true,maintainAspectRatio:false,cutout:'58%',plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${ctx.parsed}`}}}}
+      });
+    }
+  }, 60);
+}
+
+/* ═══════════════════════════════════════════════════════
+   RENDER – LOGIN
+═══════════════════════════════════════════════════════ */
+function renderLogin() {
+  const roles = Object.keys(ROLE_META);
+  const roleCards = roles.map(r => {
+    const m = ROLE_META[r]; const active = state.role === r;
+    return `
+    <button class="role-card${active?' active':''}" onclick="selectRole('${r}')">
+      <div class="role-icon"><svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round">${ICONS[m.icon]||ICONS.home}</svg></div>
+      <div><div class="role-name">${r}</div><div class="role-desc">${m.desc}</div></div>
+      <div class="role-check"><svg viewBox="0 0 24 24" style="width:10px;height:10px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round">${ICONS.check}</svg></div>
+    </button>`;
+  }).join('');
+
+  return `
+  <div id="login-screen">
+    <div class="login-hero">
+      <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1400&h=1000&fit=crop&auto=format" alt="" />
+      <div class="login-hero-overlay"></div>
+      <div class="login-hero-content">
+        <div class="brand">
+          <div class="brand-icon"><svg viewBox="0 0 24 24" style="width:20px;height:20px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round">${ICONS.building}</svg></div>
+          <div><div class="brand-name">ImobiSmart</div><div class="brand-sub">Imobiliária São Jorge</div></div>
+        </div>
+        <div>
+          <div class="hero-pill"><span class="hero-pill-dot"></span>Sistema de gestão imobiliária</div>
+          <h2 class="hero-headline">Gerencie imóveis, clientes e negociações em um só lugar.</h2>
+          <p class="hero-sub">Cada perfil acessa exatamente o que precisa — sem excesso, sem bloqueio.</p>
+          <div class="hero-stats">
+            <div><div class="hero-stat-n">${DATA.imoveis.length}</div><div class="hero-stat-l">Imóveis</div></div>
+            <div><div class="hero-stat-n">${DATA.clientes.length}</div><div class="hero-stat-l">Clientes</div></div>
+            <div><div class="hero-stat-n">${DATA.atendimentos.length}</div><div class="hero-stat-l">Atendimentos</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="login-form-wrap">
+      <div class="login-form">
+        <h1 class="login-title serif">Bem-vindo de volta</h1>
+        <p class="login-sub">Selecione seu perfil e faça login</p>
+        <div class="form-row">
+          <label class="field-label">Perfil de acesso</label>
+          <div class="role-grid">${roleCards}</div>
+        </div>
+        <div class="form-row">
+          <label class="field-label">E-mail</label>
+          <input type="email" id="login-email" placeholder="seu@email.com.br" />
+        </div>
+        <div class="form-row">
+          <label class="field-label">Senha</label>
+          <input type="password" id="login-pass" placeholder="••••••••" />
+        </div>
+        <div class="form-footer">
+          <label><input type="checkbox" /> Lembrar-me</label>
+          <a href="#">Esqueceu a senha?</a>
+        </div>
+        <button class="btn-primary" onclick="doLogin()">Entrar no sistema</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ═══════════════════════════════════════════════════════
+   RENDER – APP SHELL
+═══════════════════════════════════════════════════════ */
+function renderApp() {
+  const meta = ROLE_META[state.role];
+  const navItems = NAV_BY_ROLE[state.role];
+  const navHTML = navItems.map(n => `
+    <button class="nav-item${state.section===n.id?' active':''}" onclick="setSection('${n.id}')">
+      <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round">${ICONS[n.icon]||ICONS.home}</svg>
+      <span style="flex:1;text-align:left;font-size:12px">${n.label}</span>
+      ${state.section===n.id?'<span class="nav-dot"></span>':''}
+    </button>`).join('');
+
+  const titleMap = {painel:"Painel de Controle",imoveis:"Imóveis",clientes:"Clientes",atendimentos:"Atendimentos",negociacoes:"Negociações",meus_imoveis:"Buscar Imóveis",meus_agendamentos:"Meus Agendamentos"};
+
+  return `
+  <div id="app-shell">
+    <div id="sidebar">
+      <div class="sb-logo">
+        <div class="sb-logo-icon"><svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round">${ICONS.building}</svg></div>
+        <div><div class="sb-logo-name">ImobiSmart</div><div class="sb-logo-sub">São Jorge</div></div>
+      </div>
+      <div class="sb-role-chip">
+        <svg viewBox="0 0 24 24">${ICONS[meta.icon]||ICONS.home}</svg>
+        <span>${state.role}</span>
+      </div>
+      <nav class="sb-nav">${navHTML}</nav>
+      <div class="sb-user">
+        <div class="sb-user-row">
+          <div class="sb-avatar">${meta.initials}</div>
+          <div class="sb-user-name">${meta.name}</div>
+        </div>
+        <button class="btn-logout" onclick="doLogout()">
+          <svg viewBox="0 0 24 24">${ICONS.logout}</svg>Sair do sistema
+        </button>
+      </div>
+    </div>
+    <div id="main">
+      <div id="header">
+        <span id="header-title" class="serif">${titleMap[state.section]||''}</span>
+        <div class="header-search">
+          <svg viewBox="0 0 24 24">${ICONS.search}</svg>
+          <input type="text" placeholder="Buscar…" />
+        </div>
+        <div class="header-right">
+          <button class="notif-btn"><svg viewBox="0 0 24 24">${ICONS.bell}</svg><span class="notif-dot"></span></button>
+          <div class="header-avatar">${meta.initials}</div>
+        </div>
+      </div>
+      <div id="content"></div>
+    </div>
+  </div>`;
+}
+
+/* ═══════════════════════════════════════════════════════
+   SECTION HELPERS
+═══════════════════════════════════════════════════════ */
+function kpiCard(label, value, sub, ico, gold) {
+  return `
+  <div class="kpi-card${gold?' gold':''}">
+    <div class="kpi-top">
+      <span class="kpi-label">${label}</span>
+      <div class="kpi-icon${gold?' gold':''}">
+        <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round">${ICONS[ico]||''}</svg>
+      </div>
+    </div>
+    <div><div class="kpi-value serif">${value}</div><div class="kpi-sub">${sub}</div></div>
+  </div>`;
+}
+
+function atendRowCompact(a) {
+  let svg, color;
+  if(a.status==='Realizado'){svg=ICONS.check;color='#16a34a';}
+  else if(a.status==='Agendado'){svg=ICONS.clock;color='#2563eb';}
+  else{svg=ICONS.x;color='#f87171';}
+  return `
+  <div class="atend-card" style="border-radius:0;border-left:none;border-right:none;border-top:none;margin-bottom:0">
+    <div class="atend-icon"><svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:${color};fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round">${svg}</svg></div>
+    <div class="atend-body">
+      <div class="atend-title serif">${esc(a.cliente)} <span>· ${esc(a.tipo)}</span></div>
+      <div class="atend-sub">${esc(a.imovel)} · <span style="color:rgba(28,53,87,.70)">${esc(a.corretor)}</span></div>
+      ${a.obs?`<div class="atend-obs">"${esc(a.obs)}"</div>`:''}
+    </div>
+    <div class="atend-meta">
+      <div class="date">${a.data}</div><div>${a.horario}</div>
+      <div style="margin-top:4px">${badge(a.status)}</div>
+    </div>
+  </div>`;
+}
+
+function renderAccessDenied() {
+  return `<div class="access-denied"><div class="access-denied-icon"><svg viewBox="0 0 24 24">${ICONS.lock}</svg></div><h3 class="serif">Acesso restrito</h3><p>Seu perfil não tem permissão para visualizar este módulo.</p></div>`;
+}
+
+/* ═══════════════════════════════════════════════════════
+   PAINEL
+═══════════════════════════════════════════════════════ */
+function renderPainelAdmin() {
+  const disp = DATA.imoveis.filter(i=>i.status==='Disponível').length;
+  const ativos = DATA.clientes.filter(c=>c.status==='Ativo').length;
+  const vol = DATA.negociacoes.filter(n=>n.etapa==='Fechada').reduce((s,n)=>s+n.valor,0);
+  return `
+  <div class="kpi-grid">
+    ${kpiCard("Total de Imóveis",DATA.imoveis.length,`▲ ${disp} disponíveis`,"building",false)}
+    ${kpiCard("Clientes Ativos",ativos,`de ${DATA.clientes.length} cadastrados`,"users",false)}
+    ${kpiCard("Atendimentos",DATA.atendimentos.length,"este mês","message",false)}
+    ${kpiCard("Volume Negociado","R$ "+vol.toLocaleString("pt-BR"),"negociações fechadas","trending",true)}
+  </div>
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h3 class="serif">Negociações por Mês</h3>
+      <p>Fechadas vs. em andamento — Jan a Jul 2025</p>
+      <div style="height:200px"><canvas id="barChart"></canvas></div>
+      <div class="chart-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#1c3557"></div>Fechadas</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#b8802a"></div>Em andamento</div>
+      </div>
+    </div>
+    <div class="chart-card">
+      <h3 class="serif">Status dos Imóveis</h3>
+      <p>${DATA.imoveis.length} imóveis cadastrados</p>
+      <div style="height:160px"><canvas id="pieChart"></canvas></div>
+      <div class="pie-legend">
+        ${DATA.statusPie.map(d=>`<div class="pie-legend-item"><div class="pie-legend-left"><div class="pie-legend-dot" style="background:${d.color}"></div>${d.name}</div><div class="pie-legend-val">${d.value}</div></div>`).join('')}
+      </div>
+    </div>
+  </div>
+  <div class="table-card">
+    <div class="table-header"><h3 class="serif">Atendimentos Recentes</h3><span>${DATA.atendimentos.length} registros</span></div>
+    <div class="atend-list" style="padding:0">${DATA.atendimentos.slice(0,5).map(a=>atendRowCompact(a)).join('')}</div>
+  </div>`;
+}
+
+function renderPainelCorretor() {
+  const myAtend = DATA.atendimentos.filter(a=>a.corretor==='Carlos Lima');
+  const myNeg   = DATA.negociacoes.filter(n=>n.corretor==='Carlos Lima');
+  const myCli   = DATA.clientes.filter(c=>c.corretor==='Carlos Lima');
+  return `
+  <div class="kpi-grid">
+    ${kpiCard("Meus Clientes",myCli.length,"ativos","users",false)}
+    ${kpiCard("Atendimentos",myAtend.length,"atribuídos a mim","message",false)}
+    ${kpiCard("Negociações",myNeg.length,"em andamento","briefcase",false)}
+    ${kpiCard("Comissão Est.","R$ 48.500","este mês","trending",true)}
+  </div>
+  <div class="chart-card" style="margin-bottom:16px">
+    <h3 class="serif">Minha Performance — Últimos 4 meses</h3>
+    <p>Atendimentos realizados e negociações abertas</p>
+    <div style="height:200px"><canvas id="barChart"></canvas></div>
+    <div class="chart-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#1c3557"></div>Atendimentos</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#b8802a"></div>Negociações</div>
+    </div>
+  </div>
+  <div class="table-card">
+    <div class="table-header"><h3 class="serif">Meus Atendimentos Agendados</h3></div>
+    <div class="atend-list" style="padding:0">${myAtend.map(a=>atendRowCompact(a)).join('')}</div>
+  </div>`;
+}
+
+function renderPainelFuncionario() {
+  return `
+  <div class="kpi-grid">
+    ${kpiCard("Imóveis Cadastrados",DATA.imoveis.length,"cadastrados","building",false)}
+    ${kpiCard("Clientes Cadastrados",DATA.clientes.length,"cadastrados","users",false)}
+    ${kpiCard("Atendimentos Reg.",DATA.atendimentos.length,"registrados","message",false)}
+  </div>
+  <div class="chart-card" style="margin-bottom:16px">
+    <h3 class="serif">Atividade Operacional — Últimos 4 meses</h3>
+    <p>Cadastros novos e atendimentos registrados</p>
+    <div style="height:200px"><canvas id="barChart"></canvas></div>
+    <div class="chart-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#1c3557"></div>Cadastros</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#b8802a"></div>Atendimentos</div>
+    </div>
+  </div>
+  <div class="banner-amber">
+    <svg viewBox="0 0 24 24">${ICONS.lock}</svg>
+    <div><strong>Acesso restrito:</strong> Dados financeiros e negociações não são visíveis para este perfil. Solicite ao Administrador caso necessite.</div>
+  </div>`;
+}
+
+/* ═══════════════════════════════════════════════════════
+   IMÓVEIS
+═══════════════════════════════════════════════════════ */
+function renderImoveis() {
+  const can = CAN[state.role];
+  const f = state.filter.imoveis || 'Todos';
+  const q = (state.filter.imoveisQ || '').toLowerCase();
+  const filters = ['Todos','Disponível','Em Negociação','Alugado','Vendido'];
+  const list = DATA.imoveis.filter(i => {
+    const mS = f==='Todos' || i.status===f;
+    const mQ = !q || i.titulo.toLowerCase().includes(q) || i.bairro.toLowerCase().includes(q) || i.cidade.toLowerCase().includes(q);
+    return mS && mQ;
+  });
+
+  const actionBtn = can.add
+    ? `<button class="btn-accent" onclick="addImovelForm()"><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round">${ICONS.plus}</svg>Cadastrar imóvel</button>`
+    : `<span style="display:inline-flex;align-items:center;gap:6px;padding:7px 12px;font-size:12px;color:var(--muted-fg);border:1px solid var(--border);border-radius:8px;background:rgba(232,228,222,.4)"><svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:var(--muted-fg);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round">${ICONS.lock}</svg>Somente visualização</span>`;
+
+  const pills = filters.map(p=>`<button class="pill${f===p?' active':''}" onclick="setFilter('imoveis','${p}')">${p}</button>`).join('');
+
+  const cards = list.map(im => `
+    <div class="imovel-card">
+      <div class="imovel-img">
+        <img src="${esc(im.foto)}" alt="${esc(im.titulo)}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=480&h=320&fit=crop&auto=format'" />
+        <div class="imovel-badges">${badge(im.status)}</div>
+        <div class="imovel-tipo"><span class="badge ${im.tipo==='Venda'?'tipo-venda':'tipo-aluguel'}">${im.tipo}</span></div>
+      </div>
+      <div class="imovel-body">
+        <div class="imovel-title">${esc(im.titulo)}</div>
+        <div class="imovel-loc"><svg viewBox="0 0 24 24">${ICONS.mappin}</svg>${esc(im.bairro)}, ${esc(im.cidade)}</div>
+        <div class="imovel-specs">
+          <span class="imovel-spec"><svg viewBox="0 0 24 24">${ICONS.bed}</svg>${im.quartos} qts</span>
+          <span class="imovel-spec"><svg viewBox="0 0 24 24">${ICONS.bath}</svg>${im.banheiros}</span>
+          <span class="imovel-spec"><svg viewBox="0 0 24 24">${ICONS.car}</svg>${im.vagas}</span>
+          <span>${im.area}m²</span>
+        </div>
+        <div class="imovel-footer">
+          <div class="imovel-price serif">${fmtPreco(im.preco,im.tipo)}</div>
+          <div class="imovel-actions">
+            <button class="btn-icon" onclick="viewImovel(${im.id})" title="Ver detalhes"><svg viewBox="0 0 24 24">${ICONS.eye}</svg></button>
+            ${can.edit?`<button class="btn-icon" onclick="editImovelForm(${im.id})" title="Editar"><svg viewBox="0 0 24 24">${ICONS.edit}</svg></button>`:''}
+            ${can.del?`<button class="btn-icon danger" onclick="confirmDeleteImovel(${im.id})" title="Excluir"><svg viewBox="0 0 24 24">${ICONS.trash}</svg></button>`:''}
+          </div>
+        </div>
+      </div>
+    </div>`).join('') || `<div style="grid-column:1/-1;padding:48px;text-align:center;color:var(--muted-fg);display:flex;flex-direction:column;align-items:center;gap:8px"><svg viewBox="0 0 24 24" style="width:36px;height:36px;stroke:var(--muted-fg);fill:none;stroke-width:1.5;opacity:.4">${ICONS.building}</svg>Nenhum imóvel encontrado.</div>`;
+
+  return `
+  <div class="filter-bar">
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <div class="search-wrap">
+        <svg viewBox="0 0 24 24">${ICONS.search}</svg>
+        <input type="text" placeholder="Buscar imóvel…" value="${esc(state.filter.imoveisQ||'')}" oninput="setFilterQ('imoveisQ',this.value)" style="padding:7px 12px 7px 34px;border-radius:8px;border:1px solid var(--border);font-size:12px;width:220px;font-family:'Outfit',sans-serif;outline:none;transition:border-color .2s" />
+      </div>
+      <div class="filter-pills">${pills}</div>
+    </div>
+    ${actionBtn}
+  </div>
+  <div class="imoveis-grid">${cards}</div>`;
+}
+
+/* ── Imóvel CRUD ── */
+function viewImovel(id) {
+  const im = DATA.imoveis.find(i=>i.id===id); if(!im) return;
+  const can = CAN[state.role];
+  const body = `
+    <img class="detail-img" src="${esc(im.foto)}" alt="${esc(im.titulo)}" onerror="this.src='https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=480&h=320&fit=crop&auto=format'" />
+    <div class="detail-badges">${badge(im.status)}<span class="badge ${im.tipo==='Venda'?'tipo-venda':'tipo-aluguel'}">${im.tipo}</span></div>
+    <div class="detail-grid">
+      <div class="detail-item"><label>Preço</label><span class="big">${fmtPreco(im.preco,im.tipo)}</span></div>
+      <div class="detail-item"><label>Área</label><span>${im.area} m²</span></div>
+      <div class="detail-item"><label>Quartos</label><span>${im.quartos}</span></div>
+      <div class="detail-item"><label>Banheiros</label><span>${im.banheiros}</span></div>
+      <div class="detail-item"><label>Vagas</label><span>${im.vagas}</span></div>
+      <div class="detail-item"><label>Cidade</label><span>${esc(im.cidade)}</span></div>
+    </div>`;
+  const footer = `
+    <button class="btn-ghost" onclick="closeModal()">Fechar</button>
+    ${can.edit?`<button class="btn-accent" onclick="editImovelForm(${id})"><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round">${ICONS.edit}</svg>Editar</button>`:''}`;
+  openModal({title:esc(im.titulo), sub:`${esc(im.bairro)}, ${esc(im.cidade)} – MG`, body, footer});
+}
+
+function _imovelFormHTML(im) {
+  const sel = (v, opts) => opts.map(o=>`<option${o===v?' selected':''}>${o}</option>`).join('');
+  return `
+  <div class="form-grid">
+    <div class="form-field col-2"><label>Título *</label><input id="f-titulo" class="form-input" value="${esc(im?.titulo||'')}" placeholder="Ex: Casa com Piscina" /></div>
+    <div class="form-field"><label>Tipo</label><select id="f-tipo" class="form-input">${sel(im?.tipo||'Venda',['Venda','Aluguel'])}</select></div>
+    <div class="form-field"><label>Status</label><select id="f-status" class="form-input">${sel(im?.status||'Disponível',['Disponível','Em Negociação','Vendido','Alugado'])}</select></div>
+    <div class="form-field"><label>Bairro</label><input id="f-bairro" class="form-input" value="${esc(im?.bairro||'')}" placeholder="Centro" /></div>
+    <div class="form-field"><label>Cidade</label><select id="f-cidade" class="form-input">${sel(im?.cidade||'Verdelândia',['Verdelândia','Porteirinha'])}</select></div>
+    <div class="form-field"><label>Preço (R$)</label><input id="f-preco" class="form-input" type="number" min="0" value="${im?.preco||''}" /></div>
+    <div class="form-field"><label>Área (m²)</label><input id="f-area" class="form-input" type="number" min="0" value="${im?.area||''}" /></div>
+    <div class="form-field"><label>Quartos</label><input id="f-quartos" class="form-input" type="number" min="0" value="${im?.quartos||''}" /></div>
+    <div class="form-field"><label>Banheiros</label><input id="f-banheiros" class="form-input" type="number" min="0" value="${im?.banheiros||''}" /></div>
+    <div class="form-field"><label>Vagas</label><input id="f-vagas" class="form-input" type="number" min="0" value="${im?.vagas||''}" /></div>
+    <div class="form-field col-2"><label>URL da Foto</label><input id="f-foto" class="form-input" value="${esc(im?.foto||'')}" placeholder="https://..." /></div>
+  </div>`;
+}
+
+function addImovelForm() {
+  _editing = {type:'imovel', id:null};
+  openModal({title:'Cadastrar Imóvel', body:_imovelFormHTML(null),
+    footer:`<button class="btn-ghost" onclick="closeModal()">Cancelar</button><button class="btn-accent" onclick="saveImovel()">Cadastrar</button>`});
+}
+
+function editImovelForm(id) {
+  const im = DATA.imoveis.find(i=>i.id===id); if(!im) return;
+  _editing = {type:'imovel', id};
+  openModal({title:'Editar Imóvel', sub:`${im.bairro}, ${im.cidade}`, body:_imovelFormHTML(im),
+    footer:`<button class="btn-ghost" onclick="closeModal()">Cancelar</button><button class="btn-accent" onclick="saveImovel()">Salvar alterações</button>`});
+}
+
+function saveImovel() {
+  const titulo = document.getElementById('f-titulo')?.value?.trim();
+  if(!titulo){ showToast('O título é obrigatório.','error'); return; }
+  const data = {
+    titulo,
+    tipo:      document.getElementById('f-tipo').value,
+    status:    document.getElementById('f-status').value,
+    bairro:    document.getElementById('f-bairro').value.trim(),
+    cidade:    document.getElementById('f-cidade').value,
+    preco:    +document.getElementById('f-preco').value||0,
+    area:     +document.getElementById('f-area').value||0,
+    quartos:  +document.getElementById('f-quartos').value||0,
+    banheiros:+document.getElementById('f-banheiros').value||0,
+    vagas:    +document.getElementById('f-vagas').value||0,
+    foto:      document.getElementById('f-foto').value.trim(),
+  };
+  if(_editing?.id) {
+    const idx = DATA.imoveis.findIndex(i=>i.id===_editing.id);
+    if(idx>=0) DATA.imoveis[idx] = {...DATA.imoveis[idx],...data};
+    showToast('Imóvel atualizado com sucesso!');
+  } else {
+    DATA.imoveis.push({id:++_nextId,...data});
+    showToast('Imóvel cadastrado!');
+  }
+  closeModal(); renderSection();
+}
+
+function confirmDeleteImovel(id) {
+  openConfirm('Deseja excluir este imóvel? Esta ação não pode ser desfeita.', () => {
+    DATA.imoveis = DATA.imoveis.filter(i=>i.id!==id);
+    showToast('Imóvel excluído.','default'); renderSection();
+  });
+}
+
+/* ═══════════════════════════════════════════════════════
+   CLIENTES
+═══════════════════════════════════════════════════════ */
+function renderClientes() {
+  const can = CAN[state.role];
+  if(!can.allClients && state.role!=='Corretor') return renderAccessDenied();
+  const source = state.role==='Corretor' ? DATA.clientes.filter(c=>c.corretor==='Carlos Lima') : DATA.clientes;
+  const q = (state.filter.clientesQ||'').toLowerCase();
+  const tf = state.filter.clientesTipo||'Todos';
+  const tipos = ['Todos','Compradora','Comprador','Locatário','Investidor'];
+  const list = source.filter(c => {
+    const mQ = !q || c.nome.toLowerCase().includes(q) || c.email.toLowerCase().includes(q) || (c.tel||'').includes(q);
+    const mT = tf==='Todos' || c.tipo===tf;
+    return mQ && mT;
+  });
+
+  const banner = state.role==='Corretor'
+    ? `<div class="banner-blue"><svg viewBox="0 0 24 24">${ICONS.lock}</svg>Você visualiza apenas os clientes vinculados a você.</div>` : '';
+
+  const pills = tipos.map(t=>`<button class="pill${tf===t?' active':''}" onclick="setFilter('clientesTipo','${t}')">${t}</button>`).join('');
+
+  const addBtn = can.add
+    ? `<button class="btn-accent" onclick="addClienteForm()"><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round">${ICONS.plus}</svg>Novo cliente</button>`
+    : `<span style="display:inline-flex;align-items:center;gap:6px;padding:7px 12px;font-size:12px;color:var(--muted-fg);border:1px solid var(--border);border-radius:8px;background:rgba(232,228,222,.4)"><svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:var(--muted-fg);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round">${ICONS.lock}</svg>Somente visualização</span>`;
+
+  const rows = list.map(c=>`
+    <tr>
+      <td>
+        <div class="client-cell">
+          <div class="client-avatar">${c.nome.charAt(0)}</div>
+          <div><div class="client-name">${esc(c.nome)}</div><div class="client-email">${esc(c.email)}</div></div>
+        </div>
+      </td>
+      <td class="text-muted">${esc(c.tipo)}</td>
+      <td class="text-muted" style="max-width:160px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">${esc(c.interesse)}</td>
+      <td class="text-muted">${esc(c.corretor)}</td>
+      <td>${badge(c.status)}</td>
+      <td>
+        <div class="td-actions">
+          <button class="btn-icon" onclick="viewCliente(${c.id})" title="Ver"><svg viewBox="0 0 24 24">${ICONS.eye}</svg></button>
+          ${can.edit?`<button class="btn-icon" onclick="editClienteForm(${c.id})" title="Editar"><svg viewBox="0 0 24 24">${ICONS.edit}</svg></button>`:''}
+          ${can.del?`<button class="btn-icon danger" onclick="confirmDeleteCliente(${c.id})" title="Excluir"><svg viewBox="0 0 24 24">${ICONS.trash}</svg></button>`:''}
+        </div>
+      </td>
+    </tr>`).join('') || `<tr class="empty-row"><td colspan="6">Nenhum cliente encontrado.</td></tr>`;
+
+  return `
+  ${banner}
+  <div class="filter-bar">
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <div class="search-wrap">
+        <svg viewBox="0 0 24 24">${ICONS.search}</svg>
+        <input type="text" placeholder="Buscar cliente…" value="${esc(state.filter.clientesQ||'')}" oninput="setFilterQ('clientesQ',this.value)" style="padding:7px 12px 7px 34px;border-radius:8px;border:1px solid var(--border);font-size:12px;width:240px;font-family:'Outfit',sans-serif;outline:none;transition:border-color .2s" />
+      </div>
+      <div class="filter-pills">${pills}</div>
+    </div>
+    ${addBtn}
+  </div>
+  <div class="table-card">
+    <table>
+      <thead><tr><th>Cliente</th><th>Tipo</th><th>Interesse</th><th>Corretor</th><th>Status</th><th></th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+  </div>`;
+}
+
+/* ── Cliente CRUD ── */
+function viewCliente(id) {
+  const c = DATA.clientes.find(x=>x.id===id); if(!c) return;
+  const can = CAN[state.role];
+  const body = `
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--border)">
+      <div class="client-avatar" style="width:56px;height:56px;font-size:22px;font-weight:700">${c.nome.charAt(0)}</div>
+      <div><div style="font-family:'Fraunces',serif;font-size:18px;font-weight:600">${esc(c.nome)}</div><div style="margin-top:4px">${badge(c.status)}</div></div>
+    </div>
+    <div class="detail-grid">
+      <div class="detail-item"><label>E-mail</label><span>${esc(c.email)}</span></div>
+      <div class="detail-item"><label>Telefone</label><span>${esc(c.tel||'')}</span></div>
+      <div class="detail-item"><label>Tipo</label><span>${esc(c.tipo)}</span></div>
+      <div class="detail-item"><label>Corretor</label><span>${esc(c.corretor)}</span></div>
+      <div class="detail-item"><label>Interesse</label><span>${esc(c.interesse)}</span></div>
+      <div class="detail-item"><label>Cadastro</label><span>${c.cadastro||''}</span></div>
+    </div>`;
+  const footer = `
+    <button class="btn-ghost" onclick="closeModal()">Fechar</button>
+    ${can.edit?`<button class="btn-accent" onclick="editClienteForm(${id})"><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round">${ICONS.edit}</svg>Editar</button>`:''}`;
+  openModal({title:esc(c.nome), sub:`${esc(c.tipo)} · Corretor: ${esc(c.corretor)}`, body, footer});
+}
+
+function _clienteFormHTML(c) {
+  const sel = (v,opts) => opts.map(o=>`<option${o===v?' selected':''}>${o}</option>`).join('');
+  const corretorOpts = CORRETORES.map(r=>`<option${r===(c?.corretor||'Carlos Lima')?' selected':''}>${r}</option>`).join('');
+  return `
+  <div class="form-grid">
+    <div class="form-field col-2"><label>Nome completo *</label><input id="f-nome" class="form-input" value="${esc(c?.nome||'')}" placeholder="Maria Silva" /></div>
+    <div class="form-field"><label>E-mail</label><input id="f-email" class="form-input" type="email" value="${esc(c?.email||'')}" placeholder="email@exemplo.com" /></div>
+    <div class="form-field"><label>Telefone</label><input id="f-tel" class="form-input" value="${esc(c?.tel||'')}" placeholder="(38) 99999-0000" /></div>
+    <div class="form-field"><label>Tipo</label><select id="f-tipo" class="form-input">${sel(c?.tipo||'Comprador',['Compradora','Comprador','Locatário','Investidor'])}</select></div>
+    <div class="form-field"><label>Status</label><select id="f-status" class="form-input">${sel(c?.status||'Ativo',['Ativo','Inativo'])}</select></div>
+    <div class="form-field col-2"><label>Interesse</label><input id="f-interesse" class="form-input" value="${esc(c?.interesse||'')}" placeholder="Casa com quintal em Verdelândia" /></div>
+    <div class="form-field col-2"><label>Corretor responsável</label><select id="f-corretor" class="form-input">${corretorOpts}</select></div>
+  </div>`;
+}
+
+function addClienteForm() {
+  _editing = {type:'cliente', id:null};
+  openModal({title:'Novo Cliente', body:_clienteFormHTML(null),
+    footer:`<button class="btn-ghost" onclick="closeModal()">Cancelar</button><button class="btn-accent" onclick="saveCliente()">Cadastrar</button>`});
+}
+
+function editClienteForm(id) {
+  const c = DATA.clientes.find(x=>x.id===id); if(!c) return;
+  _editing = {type:'cliente', id};
+  openModal({title:'Editar Cliente', body:_clienteFormHTML(c),
+    footer:`<button class="btn-ghost" onclick="closeModal()">Cancelar</button><button class="btn-accent" onclick="saveCliente()">Salvar alterações</button>`});
+}
+
+function saveCliente() {
+  const nome = document.getElementById('f-nome')?.value?.trim();
+  if(!nome){ showToast('O nome é obrigatório.','error'); return; }
+  const data = {
+    nome,
+    email:    document.getElementById('f-email').value.trim(),
+    tel:      document.getElementById('f-tel').value.trim(),
+    tipo:     document.getElementById('f-tipo').value,
+    status:   document.getElementById('f-status').value,
+    interesse:document.getElementById('f-interesse').value.trim(),
+    corretor: document.getElementById('f-corretor').value,
+  };
+  if(_editing?.id) {
+    const idx = DATA.clientes.findIndex(c=>c.id===_editing.id);
+    if(idx>=0) DATA.clientes[idx] = {...DATA.clientes[idx],...data};
+    showToast('Cliente atualizado!');
+  } else {
+    DATA.clientes.push({id:++_nextId, cadastro:new Date().toLocaleDateString('pt-BR'), ...data});
+    showToast('Cliente cadastrado!');
+  }
+  closeModal(); renderSection();
+}
+
+function confirmDeleteCliente(id) {
+  openConfirm('Deseja excluir este cliente? Esta ação não pode ser desfeita.', () => {
+    DATA.clientes = DATA.clientes.filter(c=>c.id!==id);
+    showToast('Cliente excluído.','default'); renderSection();
+  });
+}
+
+/* ═══════════════════════════════════════════════════════
+   ATENDIMENTOS
+═══════════════════════════════════════════════════════ */
+function renderAtendimentos() {
+  const can = CAN[state.role];
+  const f = state.filter.atend || 'Todos';
+  const filters = ['Todos','Agendado','Realizado','Cancelado'];
+  const source = state.role==='Corretor' ? DATA.atendimentos.filter(a=>a.corretor==='Carlos Lima') : DATA.atendimentos;
+  const list = f==='Todos' ? source : source.filter(a=>a.status===f);
+
+  const banner = state.role==='Corretor'
+    ? `<div class="banner-blue"><svg viewBox="0 0 24 24">${ICONS.lock}</svg>Você visualiza apenas os atendimentos atribuídos a você.</div>` : '';
+
+  const addBtn = can.add
+    ? `<button class="btn-accent" onclick="addAtendForm()"><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round">${ICONS.plus}</svg>Novo atendimento</button>`
+    : `<span style="display:inline-flex;align-items:center;gap:6px;padding:7px 12px;font-size:12px;color:var(--muted-fg);border:1px solid var(--border);border-radius:8px;background:rgba(232,228,222,.4)"><svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:var(--muted-fg);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round">${ICONS.lock}</svg>Somente visualização</span>`;
+
+  const pills = filters.map(p=>`<button class="pill${f===p?' active':''}" onclick="setFilter('atend','${p}')">${p}</button>`).join('');
+
+  const items = list.map(a => {
+    let svg, color;
+    if(a.status==='Realizado'){svg=ICONS.check;color='#16a34a';}
+    else if(a.status==='Agendado'){svg=ICONS.clock;color='#2563eb';}
+    else{svg=ICONS.x;color='#f87171';}
+    return `
+    <div class="atend-card" style="cursor:pointer" onclick="viewAtendimento(${a.id})">
+      <div class="atend-icon"><svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:${color};fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round">${svg}</svg></div>
+      <div class="atend-body">
+        <div class="atend-title serif">${esc(a.cliente)} <span>· ${esc(a.tipo)}</span></div>
+        <div class="atend-sub">${esc(a.imovel)} · <span style="color:rgba(28,53,87,.70)">${esc(a.corretor)}</span></div>
+        ${a.obs?`<div class="atend-obs">"${esc(a.obs)}"</div>`:''}
+      </div>
+      <div class="atend-meta">
+        <div class="date">${a.data}</div><div>${a.horario}</div>
+        <div style="margin-top:4px">${badge(a.status)}</div>
+        <div style="display:flex;gap:2px;justify-content:flex-end;margin-top:6px" onclick="event.stopPropagation()">
+          ${can.edit?`<button class="btn-icon" onclick="editAtendForm(${a.id})" title="Editar"><svg viewBox="0 0 24 24">${ICONS.edit}</svg></button>`:''}
+          ${can.del?`<button class="btn-icon danger" onclick="confirmDeleteAtend(${a.id})" title="Excluir"><svg viewBox="0 0 24 24">${ICONS.trash}</svg></button>`:''}
+        </div>
+      </div>
+    </div>`;
+  }).join('') || `<div style="padding:48px;text-align:center;color:var(--muted-fg)">Nenhum atendimento encontrado.</div>`;
+
+  return `
+  ${banner}
+  <div class="filter-bar">
+    <div class="filter-pills">${pills}</div>
+    ${addBtn}
+  </div>
+  <div class="atend-list">${items}</div>`;
+}
+
+/* ── Atendimento CRUD ── */
+function viewAtendimento(id) {
+  const a = DATA.atendimentos.find(x=>x.id===id); if(!a) return;
+  const can = CAN[state.role];
+  const body = `
+    <div style="display:flex;align-items:center;gap:8px;padding:12px;background:rgba(232,228,222,.4);border-radius:8px;margin-bottom:16px">
+      ${badge(a.status)}<span style="font-size:13px;font-weight:500">${esc(a.tipo)}</span>
+    </div>
+    <div class="detail-grid">
+      <div class="detail-item"><label>Cliente</label><span>${esc(a.cliente)}</span></div>
+      <div class="detail-item"><label>Corretor</label><span>${esc(a.corretor)}</span></div>
+      <div class="detail-item"><label>Imóvel</label><span>${esc(a.imovel)}</span></div>
+      <div class="detail-item"><label>Data</label><span>${a.data}</span></div>
+      <div class="detail-item"><label>Horário</label><span>${a.horario}</span></div>
+      ${a.obs?`<div class="detail-item" style="grid-column:1/-1"><label>Observações</label><span style="font-style:italic;color:var(--muted-fg)">"${esc(a.obs)}"</span></div>`:''}
+    </div>`;
+  const footer = `
+    <button class="btn-ghost" onclick="closeModal()">Fechar</button>
+    ${can.edit?`<button class="btn-accent" onclick="editAtendForm(${id})"><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round">${ICONS.edit}</svg>Editar</button>`:''}`;
+  openModal({title:esc(a.cliente), sub:`${esc(a.tipo)} · ${a.data} às ${a.horario}`, body, footer});
+}
+
+function _atendFormHTML(a) {
+  const sel = (v,opts) => opts.map(o=>`<option${o===v?' selected':''}>${o}</option>`).join('');
+  const clienteOpts = DATA.clientes.map(c=>`<option${c.nome===(a?.cliente||'')?' selected':''}>${esc(c.nome)}</option>`).join('');
+  const corretorOpts = CORRETORES.map(r=>`<option${r===(a?.corretor||'Carlos Lima')?' selected':''}>${r}</option>`).join('');
+  return `
+  <div class="form-grid">
+    <div class="form-field col-2"><label>Cliente *</label><select id="f-cliente" class="form-input"><option value="">Selecione…</option>${clienteOpts}</select></div>
+    <div class="form-field"><label>Corretor</label><select id="f-corretor" class="form-input">${corretorOpts}</select></div>
+    <div class="form-field"><label>Tipo</label><select id="f-tipo" class="form-input">${sel(a?.tipo||'Visita',['Visita','Reunião','Apresentação','Ligação'])}</select></div>
+    <div class="form-field col-2"><label>Imóvel</label><input id="f-imovel" class="form-input" value="${esc(a?.imovel||'')}" placeholder="Ex: Casa Residencial – Porteirinha" /></div>
+    <div class="form-field"><label>Data</label><input id="f-data" class="form-input" type="date" value="${toISODate(a?.data||'')}" /></div>
+    <div class="form-field"><label>Horário</label><input id="f-horario" class="form-input" type="time" value="${a?.horario||''}" /></div>
+    <div class="form-field col-2"><label>Status</label><select id="f-status" class="form-input">${sel(a?.status||'Agendado',['Agendado','Realizado','Cancelado'])}</select></div>
+    <div class="form-field col-2"><label>Observações</label><textarea id="f-obs" class="form-input">${esc(a?.obs||'')}</textarea></div>
+  </div>`;
+}
+
+function addAtendForm() {
+  _editing = {type:'atend', id:null};
+  openModal({title:'Novo Atendimento', body:_atendFormHTML(null),
+    footer:`<button class="btn-ghost" onclick="closeModal()">Cancelar</button><button class="btn-accent" onclick="saveAtend()">Registrar</button>`});
+}
+
+function editAtendForm(id) {
+  const a = DATA.atendimentos.find(x=>x.id===id); if(!a) return;
+  _editing = {type:'atend', id};
+  openModal({title:'Editar Atendimento', body:_atendFormHTML(a),
+    footer:`<button class="btn-ghost" onclick="closeModal()">Cancelar</button><button class="btn-accent" onclick="saveAtend()">Salvar alterações</button>`});
+}
+
+function saveAtend() {
+  const cliente = document.getElementById('f-cliente')?.value;
+  if(!cliente){ showToast('Selecione o cliente.','error'); return; }
+  const dataRaw = document.getElementById('f-data').value;
+  const data = {
+    cliente,
+    corretor: document.getElementById('f-corretor').value,
+    tipo:     document.getElementById('f-tipo').value,
+    imovel:   document.getElementById('f-imovel').value.trim(),
+    data:     dataRaw ? toBRDate(dataRaw) : '',
+    horario:  document.getElementById('f-horario').value,
+    status:   document.getElementById('f-status').value,
+    obs:      document.getElementById('f-obs').value.trim(),
+  };
+  if(_editing?.id) {
+    const idx = DATA.atendimentos.findIndex(a=>a.id===_editing.id);
+    if(idx>=0) DATA.atendimentos[idx] = {...DATA.atendimentos[idx],...data};
+    showToast('Atendimento atualizado!');
+  } else {
+    DATA.atendimentos.push({id:++_nextId,...data});
+    showToast('Atendimento registrado!');
+  }
+  closeModal(); renderSection();
+}
+
+function confirmDeleteAtend(id) {
+  openConfirm('Deseja excluir este atendimento?', () => {
+    DATA.atendimentos = DATA.atendimentos.filter(a=>a.id!==id);
+    showToast('Atendimento excluído.','default'); renderSection();
+  });
+}
+
+/* ═══════════════════════════════════════════════════════
+   NEGOCIAÇÕES
+═══════════════════════════════════════════════════════ */
+function renderNegociacoes() {
+  const can = CAN[state.role];
+  if(!can.allNeg && state.role!=='Corretor') return renderAccessDenied();
+  const f = state.filter.neg || 'Todos';
+  const filters = ['Todos','Em Proposta','Em Análise','Contrato','Fechada','Cancelada'];
+  const source = state.role==='Corretor' ? DATA.negociacoes.filter(n=>n.corretor==='Carlos Lima') : DATA.negociacoes;
+  const list = f==='Todos' ? source : source.filter(n=>n.etapa===f);
+
+  const banner = state.role==='Corretor'
+    ? `<div class="banner-blue"><svg viewBox="0 0 24 24">${ICONS.lock}</svg>Você visualiza apenas as negociações em que é responsável. Valores globais não são exibidos.</div>` : '';
+
+  const addBtn = can.add
+    ? `<button class="btn-accent" onclick="addNegForm()"><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round">${ICONS.plus}</svg>Nova negociação</button>`
+    : `<span style="display:inline-flex;align-items:center;gap:6px;padding:7px 12px;font-size:12px;color:var(--muted-fg);border:1px solid var(--border);border-radius:8px;background:rgba(232,228,222,.4)"><svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:var(--muted-fg);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round">${ICONS.lock}</svg>Somente visualização</span>`;
+
+  const pills = filters.map(p=>`<button class="pill${f===p?' active':''}" onclick="setFilter('neg','${p}')">${p}</button>`).join('');
+
+  const rows = list.map(n=>`
+    <tr style="cursor:pointer" onclick="viewNegociacao(${n.id})">
+      <td><div class="client-name">${esc(n.cliente)}</div><div class="client-email">${esc(n.tipo)}</div></td>
+      <td class="text-muted" style="font-size:12px;max-width:160px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">${esc(n.imovel)}</td>
+      ${can.financial?`<td class="text-primary-bold">${fmtPreco(n.valor,n.tipo)}</td>`:''}
+      <td class="text-muted" style="font-size:12px">${esc(n.corretor)}</td>
+      <td>${badge(n.etapa)}</td>
+      <td class="text-muted" style="font-size:12px">${n.data}</td>
+      <td onclick="event.stopPropagation()">
+        <div class="td-actions">
+          ${can.edit?`<button class="btn-icon" onclick="editNegForm(${n.id})" title="Editar"><svg viewBox="0 0 24 24">${ICONS.edit}</svg></button>`:''}
+          ${can.del?`<button class="btn-icon danger" onclick="confirmDeleteNeg(${n.id})" title="Excluir"><svg viewBox="0 0 24 24">${ICONS.trash}</svg></button>`:''}
+        </div>
+      </td>
+    </tr>`).join('') || `<tr class="empty-row"><td colspan="7">Nenhuma negociação encontrada.</td></tr>`;
+
+  return `
+  ${banner}
+  <div class="filter-bar">
+    <div class="filter-pills">${pills}</div>
+    ${addBtn}
+  </div>
+  <div class="table-card">
+    <table>
+      <thead>
+        <tr>
+          <th>Cliente</th><th>Imóvel</th>
+          ${can.financial?'<th>Valor</th>':''}
+          <th>Corretor</th><th>Etapa</th><th>Data</th><th></th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+  </div>`;
+}
+
+/* ── Negociação CRUD ── */
+function viewNegociacao(id) {
+  const n = DATA.negociacoes.find(x=>x.id===id); if(!n) return;
+  const can = CAN[state.role];
+  const body = `
+    <div class="detail-grid">
+      <div class="detail-item"><label>Cliente</label><span>${esc(n.cliente)}</span></div>
+      <div class="detail-item"><label>Corretor</label><span>${esc(n.corretor)}</span></div>
+      <div class="detail-item"><label>Imóvel</label><span>${esc(n.imovel)}</span></div>
+      <div class="detail-item"><label>Tipo</label><span>${esc(n.tipo)}</span></div>
+      ${can.financial?`<div class="detail-item"><label>Valor</label><span class="big">${fmtPreco(n.valor,n.tipo)}</span></div>`:''}
+      <div class="detail-item"><label>Etapa</label><span>${badge(n.etapa)}</span></div>
+      <div class="detail-item"><label>Data</label><span>${n.data}</span></div>
+    </div>`;
+  const footer = `
+    <button class="btn-ghost" onclick="closeModal()">Fechar</button>
+    ${can.edit?`<button class="btn-accent" onclick="editNegForm(${id})"><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round">${ICONS.edit}</svg>Editar</button>`:''}`;
+  openModal({title:esc(n.cliente), sub:`${esc(n.tipo)} · ${esc(n.imovel)}`, body, footer});
+}
+
+function _negFormHTML(n) {
+  const sel = (v,opts) => opts.map(o=>`<option${o===v?' selected':''}>${o}</option>`).join('');
+  const clienteOpts = DATA.clientes.map(c=>`<option${c.nome===(n?.cliente||'')?' selected':''}>${esc(c.nome)}</option>`).join('');
+  const corretorOpts = CORRETORES.map(r=>`<option${r===(n?.corretor||'Carlos Lima')?' selected':''}>${r}</option>`).join('');
+  return `
+  <div class="form-grid">
+    <div class="form-field col-2"><label>Cliente *</label><select id="f-cliente" class="form-input"><option value="">Selecione…</option>${clienteOpts}</select></div>
+    <div class="form-field"><label>Corretor</label><select id="f-corretor" class="form-input">${corretorOpts}</select></div>
+    <div class="form-field"><label>Tipo</label><select id="f-tipo" class="form-input">${sel(n?.tipo||'Venda',['Venda','Aluguel'])}</select></div>
+    <div class="form-field col-2"><label>Imóvel</label><input id="f-imovel" class="form-input" value="${esc(n?.imovel||'')}" placeholder="Ex: Chácara – Verdelândia" /></div>
+    <div class="form-field"><label>Valor (R$)</label><input id="f-valor" class="form-input" type="number" min="0" value="${n?.valor||''}" /></div>
+    <div class="form-field"><label>Etapa</label><select id="f-etapa" class="form-input">${sel(n?.etapa||'Em Proposta',['Em Proposta','Em Análise','Contrato','Fechada','Cancelada'])}</select></div>
+    <div class="form-field col-2"><label>Data</label><input id="f-data" class="form-input" type="date" value="${toISODate(n?.data||'')}" /></div>
+  </div>`;
+}
+
+function addNegForm() {
+  _editing = {type:'neg', id:null};
+  openModal({title:'Nova Negociação', body:_negFormHTML(null),
+    footer:`<button class="btn-ghost" onclick="closeModal()">Cancelar</button><button class="btn-accent" onclick="saveNeg()">Criar</button>`});
+}
+
+function editNegForm(id) {
+  const n = DATA.negociacoes.find(x=>x.id===id); if(!n) return;
+  _editing = {type:'neg', id};
+  openModal({title:'Editar Negociação', body:_negFormHTML(n),
+    footer:`<button class="btn-ghost" onclick="closeModal()">Cancelar</button><button class="btn-accent" onclick="saveNeg()">Salvar alterações</button>`});
+}
+
+function saveNeg() {
+  const cliente = document.getElementById('f-cliente')?.value;
+  if(!cliente){ showToast('Selecione o cliente.','error'); return; }
+  const dataRaw = document.getElementById('f-data').value;
+  const data = {
+    cliente,
+    corretor: document.getElementById('f-corretor').value,
+    tipo:     document.getElementById('f-tipo').value,
+    imovel:   document.getElementById('f-imovel').value.trim(),
+    valor:   +document.getElementById('f-valor').value||0,
+    etapa:    document.getElementById('f-etapa').value,
+    data:     dataRaw ? toBRDate(dataRaw) : '',
+  };
+  if(_editing?.id) {
+    const idx = DATA.negociacoes.findIndex(n=>n.id===_editing.id);
+    if(idx>=0) DATA.negociacoes[idx] = {...DATA.negociacoes[idx],...data};
+    showToast('Negociação atualizada!');
+  } else {
+    DATA.negociacoes.push({id:++_nextId,...data});
+    showToast('Negociação criada!');
+  }
+  closeModal(); renderSection();
+}
+
+function confirmDeleteNeg(id) {
+  openConfirm('Deseja excluir esta negociação?', () => {
+    DATA.negociacoes = DATA.negociacoes.filter(n=>n.id!==id);
+    showToast('Negociação excluída.','default'); renderSection();
+  });
+}
+
+/* ═══════════════════════════════════════════════════════
+   PORTAL CLIENTE
+═══════════════════════════════════════════════════════ */
+function renderMeusImoveis() {
+  const f = state.filter.portalTipo || 'Todos';
+  const q = (state.filter.portalQ||'').toLowerCase();
+  const filters = ['Todos','Venda','Aluguel'];
+  const disponiveis = DATA.imoveis.filter(i=>i.status==='Disponível');
+  const list = disponiveis
+    .filter(i=>f==='Todos'||i.tipo===f)
+    .filter(i=>!q||i.titulo.toLowerCase().includes(q)||i.bairro.toLowerCase().includes(q)||i.cidade.toLowerCase().includes(q));
+
+  const pills = filters.map(p=>`<button class="pill${f===p?' active':''}" onclick="setFilter('portalTipo','${p}')">${p}</button>`).join('');
+
+  const cards = list.map(im=>`
+    <div class="imovel-card">
+      <div class="imovel-img">
+        <img src="${esc(im.foto)}" alt="${esc(im.titulo)}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=480&h=320&fit=crop&auto=format'" />
+        <div class="imovel-tipo"><span class="badge ${im.tipo==='Venda'?'tipo-venda':'tipo-aluguel'}">${im.tipo}</span></div>
+      </div>
+      <div class="imovel-body">
+        <div class="imovel-title">${esc(im.titulo)}</div>
+        <div class="imovel-loc"><svg viewBox="0 0 24 24">${ICONS.mappin}</svg>${esc(im.bairro)}, ${esc(im.cidade)}</div>
+        <div class="imovel-specs">
+          <span class="imovel-spec"><svg viewBox="0 0 24 24">${ICONS.bed}</svg>${im.quartos} qts</span>
+          <span class="imovel-spec"><svg viewBox="0 0 24 24">${ICONS.bath}</svg>${im.banheiros}</span>
+          <span class="imovel-spec"><svg viewBox="0 0 24 24">${ICONS.car}</svg>${im.vagas}</span>
+          <span>${im.area}m²</span>
+        </div>
+        <div class="imovel-footer">
+          <div class="imovel-price serif">${fmtPreco(im.preco,im.tipo)}</div>
+          <button class="btn-accent" style="font-size:11px;padding:6px 12px" onclick="viewImovelPortal(${im.id})">
+            <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round">${ICONS.eye}</svg>Ver detalhes
+          </button>
+        </div>
+      </div>
+    </div>`).join('') || `<div style="grid-column:1/-1;padding:48px;text-align:center;color:var(--muted-fg)">Nenhum imóvel disponível no momento.</div>`;
+
+  return `
+  <div class="portal-banner">
+    <div class="small">Olá, Maria Fernanda</div>
+    <h2>Encontre o imóvel ideal para você</h2>
+    <div class="sub">Confira os imóveis disponíveis para compra ou aluguel em Verdelândia e Porteirinha.</div>
+  </div>
+  <div class="filter-bar">
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24">${ICONS.search}</svg>
+      <input type="text" placeholder="Buscar por nome, bairro…" value="${esc(state.filter.portalQ||'')}" oninput="setFilterQ('portalQ',this.value)" style="padding:7px 12px 7px 34px;border-radius:8px;border:1px solid var(--border);font-size:12px;width:280px;font-family:'Outfit',sans-serif;outline:none" />
+    </div>
+    <div class="filter-pills">${pills}</div>
+  </div>
+  <div class="imoveis-grid">${cards}</div>`;
+}
+
+function viewImovelPortal(id) {
+  const im = DATA.imoveis.find(i=>i.id===id); if(!im) return;
+  const body = `
+    <img class="detail-img" src="${esc(im.foto)}" alt="${esc(im.titulo)}" onerror="this.src='https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=480&h=320&fit=crop&auto=format'" />
+    <div class="detail-badges"><span class="badge ${im.tipo==='Venda'?'tipo-venda':'tipo-aluguel'}">${im.tipo}</span></div>
+    <div class="detail-grid">
+      <div class="detail-item"><label>Preço</label><span class="big">${fmtPreco(im.preco,im.tipo)}</span></div>
+      <div class="detail-item"><label>Área</label><span>${im.area} m²</span></div>
+      <div class="detail-item"><label>Quartos</label><span>${im.quartos}</span></div>
+      <div class="detail-item"><label>Banheiros</label><span>${im.banheiros}</span></div>
+      <div class="detail-item"><label>Vagas</label><span>${im.vagas}</span></div>
+      <div class="detail-item"><label>Cidade</label><span>${esc(im.cidade)}</span></div>
+    </div>`;
+  openModal({title:esc(im.titulo), sub:`${esc(im.bairro)}, ${esc(im.cidade)} – MG`, body,
+    footer:`<button class="btn-ghost" onclick="closeModal()">Fechar</button><button class="btn-accent" onclick="showToast('Solicitação de visita enviada!','success');closeModal()">Solicitar visita</button>`});
+}
+
+function renderMeusAgendamentos() {
+  const list = DATA.atendimentos.filter(a=>a.cliente==='Maria Fernanda Costa');
+  const items = list.map(a=>{
+    let svg,color;
+    if(a.status==='Realizado'){svg=ICONS.check;color='#16a34a';}
+    else if(a.status==='Agendado'){svg=ICONS.clock;color='#2563eb';}
+    else{svg=ICONS.x;color='#f87171';}
+    return `
+    <div class="atend-card">
+      <div style="width:40px;height:40px;border-radius:10px;background:rgba(28,53,87,.08);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <svg viewBox="0 0 24 24" style="width:20px;height:20px;stroke:${color};fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round">${svg}</svg>
+      </div>
+      <div class="atend-body">
+        <div class="atend-title serif">${esc(a.tipo)} · ${esc(a.imovel)}</div>
+        <div class="atend-sub">Corretor: ${esc(a.corretor)}</div>
+        ${a.obs?`<div class="atend-obs">"${esc(a.obs)}"</div>`:''}
+      </div>
+      <div class="atend-meta">
+        <div class="date">${a.data}</div><div>${a.horario}</div>
+        <div style="margin-top:4px">${badge(a.status)}</div>
+      </div>
+    </div>`;
+  }).join('') || `<div style="padding:48px;text-align:center;color:var(--muted-fg)">Nenhum agendamento encontrado.</div>`;
+
+  return `
+  <div class="portal-banner">
+    <div class="small">Maria Fernanda Costa</div>
+    <h2>Seus Agendamentos</h2>
+    <div class="sub">Visitas e reuniões marcadas com seu corretor.</div>
+  </div>
+  <div class="atend-list" style="margin-bottom:16px">${items}</div>
+  <div class="banner-blue">
+    <svg viewBox="0 0 24 24">${ICONS.message}</svg>
+    <div><strong>Quer agendar uma visita?</strong> Entre em contato com a Imobiliária São Jorge pelo telefone (38) 3333-4444 ou pelo WhatsApp.</div>
+  </div>`;
+}
+
+/* ═══════════════════════════════════════════════════════
+   SECTION ROUTER
+═══════════════════════════════════════════════════════ */
+function renderSection() {
+  const content = document.getElementById('content');
+  if(!content) return;
+  const s = state.section;
+  let html = '';
+  if(s==='painel'){
+    if(state.role==='Administrador')        html=renderPainelAdmin();
+    else if(state.role==='Corretor')        html=renderPainelCorretor();
+    else                                     html=renderPainelFuncionario();
+  } else if(s==='imoveis')                  html=renderImoveis();
+  else if(s==='clientes')                   html=renderClientes();
+  else if(s==='atendimentos')               html=renderAtendimentos();
+  else if(s==='negociacoes')                html=renderNegociacoes();
+  else if(s==='meus_imoveis')               html=renderMeusImoveis();
+  else if(s==='meus_agendamentos')          html=renderMeusAgendamentos();
+  content.innerHTML = html;
+  if(s==='painel') initCharts();
+}
+
+/* ═══════════════════════════════════════════════════════
+   MAIN RENDER
+═══════════════════════════════════════════════════════ */
+function render() {
+  const app = document.getElementById('app');
+  if(!state.loggedIn) {
+    app.innerHTML = renderLogin();
+  } else {
+    app.innerHTML = renderApp();
+    renderSection();
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   ACTIONS
+═══════════════════════════════════════════════════════ */
+function selectRole(r) { state.role = r; render(); }
+
+function doLogin() {
+  const meta = ROLE_META[state.role];
+  const first = NAV_BY_ROLE[state.role][0].id;
+  state.section = first;
+  state.loggedIn = true;
+  state.filter = {};
+  render();
+  setTimeout(() => showToast(`Bem-vindo, ${meta.name.split(' ')[0]}!`,'success'), 100);
+}
+
+function doLogout() {
+  state.loggedIn = false;
+  state.role = 'Administrador';
+  state.filter = {};
+  render();
+}
+
+function setSection(s) {
+  state.section = s;
+  document.querySelectorAll('.nav-item').forEach(el => {
+    el.classList.toggle('active', el.getAttribute('onclick')===`setSection('${s}')`);
+  });
+  const titleMap = {painel:"Painel de Controle",imoveis:"Imóveis",clientes:"Clientes",atendimentos:"Atendimentos",negociacoes:"Negociações",meus_imoveis:"Buscar Imóveis",meus_agendamentos:"Meus Agendamentos"};
+  const ht = document.getElementById('header-title');
+  if(ht) ht.textContent = titleMap[s]||'';
+  destroyChart('bar'); destroyChart('pie');
+  renderSection();
+}
+
+function setFilter(key, val) {
+  state.filter[key] = val;
+  renderSection();
+}
+
+function setFilterQ(key, val) {
+  state.filter[key] = val;
+  renderSection();
+}
+
+/* ── Boot ── */
+render();
+</script>
+</body>
+</html>
