@@ -392,7 +392,7 @@ const DATA = {
   funcStats:     [{mes:"Abr",cadastros:8,atend:22},{mes:"Mai",cadastros:11,atend:31},{mes:"Jun",cadastros:9,atend:28},{mes:"Jul",cadastros:14,atend:35}],
   statusPie:     [{name:"Disponível",value:68,color:"#2d7a4f"},{name:"Em Negociação",value:18,color:"#b8802a"},{name:"Vendido",value:24,color:"#1c3557"},{name:"Alugado",value:17,color:"#7c3aed"}],
   imoveis: [
-    {id:1,titulo:"Casa em Condomínio Fechado", bairro:"Centro",      cidade:"Verdelândia",tipo:"Venda",  preco:320000,quartos:4,banheiros:3,vagas:2,area:320,status:"Disponível",    foto:"https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=480&h=320&fit=crop&auto=format"},
+    {id:1,titulo:"Casa em Condomínio Fechado", bairro:"Centro",      cidade:"Porteirinha",tipo:"Venda",  preco:320000,quartos:4,banheiros:3,vagas:2,area:320,status:"Disponível",    foto:"https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=480&h=320&fit=crop&auto=format"},
     {id:2,titulo:"Casa Residencial Ampla",     bairro:"Bairro Novo", cidade:"Porteirinha", tipo:"Venda",  preco:210000,quartos:3,banheiros:2,vagas:2,area:145,status:"Disponível",    foto:"https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=480&h=320&fit=crop&auto=format"},
     {id:3,titulo:"Chácara com Área Verde",     bairro:"Zona Rural",  cidade:"Verdelândia",tipo:"Venda",  preco:580000,quartos:4,banheiros:4,vagas:3,area:480,status:"Em Negociação", foto:"https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=480&h=320&fit=crop&auto=format"},
     {id:4,titulo:"Casa para Locação",          bairro:"São José",    cidade:"Porteirinha", tipo:"Aluguel",preco:1200,  quartos:2,banheiros:1,vagas:1,area:90, status:"Disponível",    foto:"https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=480&h=320&fit=crop&auto=format"},
@@ -400,23 +400,23 @@ const DATA = {
     {id:6,titulo:"Casa com Quintal",           bairro:"Santa Luzia", cidade:"Porteirinha", tipo:"Aluguel",preco:900,   quartos:2,banheiros:2,vagas:1,area:98, status:"Alugado",       foto:"https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=480&h=320&fit=crop&auto=format"},
   ],
   clientes: [
-    {id:1,nome:"Maria Fernanda Costa",  email:"maria.costa@email.com",  tel:"(38) 98765-4321",tipo:"Compradora",interesse:"Casa em Verdelândia",     status:"Ativo",  cadastro:"12/06/2025",corretor:"Carlos Lima"},
+    {id:1,nome:"Maria Fernanda Costa",  email:"maria.costa@email.com",  tel:"(38) 98765-4321",tipo:"Compradora",interesse:"Casa em Verdelândia",     status:"Ativo",  cadastro:"12/06/2025",corretor:"Isaac Bruno"},
     {id:2,nome:"Ricardo Almeida",       email:"r.almeida@empresa.com",  tel:"(38) 97654-3210",tipo:"Locatário", interesse:"Casa para locação",        status:"Ativo",  cadastro:"08/06/2025",corretor:"Ana Martins"},
     {id:3,nome:"Juliana Souza",         email:"juliana.s@gmail.com",    tel:"(38) 96543-2109",tipo:"Compradora",interesse:"Casa com quintal",          status:"Ativo",  cadastro:"01/06/2025",corretor:"Bruno Teixeira"},
-    {id:4,nome:"Carlos Eduardo Mendes",email:"carlos.mendes@invest.com",tel:"(38) 95432-1098",tipo:"Investidor",interesse:"Chácara ou sítio",          status:"Ativo",  cadastro:"28/05/2025",corretor:"Carlos Lima"},
+    {id:4,nome:"Carlos Eduardo Mendes",email:"carlos.mendes@invest.com",tel:"(38) 95432-1098",tipo:"Investidor",interesse:"Chácara ou sítio",          status:"Ativo",  cadastro:"28/05/2025",corretor:"Isaac Bruno"},
     {id:5,nome:"Patrícia Nunes",        email:"pnunes@hotmail.com",     tel:"(38) 94321-0987",tipo:"Compradora",interesse:"Casa em condomínio",        status:"Inativo",cadastro:"15/05/2025",corretor:"Luana Ramos"},
     {id:6,nome:"Fernando Gomes",        email:"fgomes@outlook.com",     tel:"(38) 93210-9876",tipo:"Locatário", interesse:"Casa 2 quartos",            status:"Ativo",  cadastro:"10/05/2025",corretor:"Ana Martins"},
   ],
   atendimentos: [
-    {id:1,cliente:"Maria Fernanda Costa", corretor:"Carlos Lima",   imovel:"Casa Residencial – Porteirinha",  tipo:"Visita",      data:"14/07/2025",horario:"10:00",status:"Agendado", obs:"Confirmar documentação do imóvel"},
+    {id:1,cliente:"Maria Fernanda Costa", corretor:"Isaac Bruno",   imovel:"Casa Residencial – Porteirinha",  tipo:"Visita",      data:"14/07/2025",horario:"10:00",status:"Agendado", obs:"Confirmar documentação do imóvel"},
     {id:2,cliente:"Ricardo Almeida",      corretor:"Ana Martins",   imovel:"Casa para Locação – Porteirinha", tipo:"Visita",      data:"11/07/2025",horario:"14:30",status:"Realizado",obs:"Muito interessado; pediu proposta"},
     {id:3,cliente:"Juliana Souza",        corretor:"Bruno Teixeira",imovel:"Casa em Condomínio – Verdelândia",tipo:"Reunião",     data:"10/07/2025",horario:"09:00",status:"Realizado",obs:"Aprovação de crédito pendente"},
-    {id:4,cliente:"Carlos Eduardo Mendes",corretor:"Carlos Lima",   imovel:"Chácara – Verdelândia",           tipo:"Apresentação",data:"16/07/2025",horario:"11:00",status:"Agendado", obs:"Trazer memorial descritivo"},
+    {id:4,cliente:"Carlos Eduardo Mendes",corretor:"Isaac Bruno",   imovel:"Chácara – Verdelândia",           tipo:"Apresentação",data:"16/07/2025",horario:"11:00",status:"Agendado", obs:"Trazer memorial descritivo"},
     {id:5,cliente:"Fernando Gomes",       corretor:"Luana Ramos",   imovel:"Casa com Quintal – Porteirinha",  tipo:"Visita",      data:"09/07/2025",horario:"16:00",status:"Cancelado",obs:"Remarcado para próxima semana"},
     {id:6,cliente:"Patrícia Nunes",       corretor:"Bruno Teixeira",imovel:"Sítio – Verdelândia",             tipo:"Visita",      data:"17/07/2025",horario:"15:00",status:"Agendado", obs:""},
   ],
   negociacoes: [
-    {id:1,cliente:"Carlos Eduardo Mendes",corretor:"Carlos Lima",   imovel:"Chácara – Verdelândia",           valor:560000,etapa:"Em Proposta",data:"10/07/2025",tipo:"Venda"},
+    {id:1,cliente:"Carlos Eduardo Mendes",corretor:"Isaac Bruno",   imovel:"Chácara – Verdelândia",           valor:560000,etapa:"Em Proposta",data:"10/07/2025",tipo:"Venda"},
     {id:2,cliente:"Maria Fernanda Costa", corretor:"Ana Martins",   imovel:"Casa Residencial – Porteirinha",  valor:205000,etapa:"Em Análise", data:"05/07/2025",tipo:"Venda"},
     {id:3,cliente:"Ricardo Almeida",      corretor:"Luana Ramos",   imovel:"Casa para Locação – Porteirinha", valor:1200,  etapa:"Contrato",   data:"01/07/2025",tipo:"Aluguel"},
     {id:4,cliente:"Juliana Souza",        corretor:"Bruno Teixeira",imovel:"Casa em Condomínio – Verdelândia",valor:315000,etapa:"Fechada",    data:"28/06/2025",tipo:"Venda"},
@@ -424,7 +424,7 @@ const DATA = {
   ],
 };
 
-const CORRETORES = ["Carlos Lima","Ana Martins","Bruno Teixeira","Luana Ramos"];
+const CORRETORES = ["Isaac Bruno","Ana Martins","Bruno Teixeira","Luana Ramos"];
 
 /* ═══════════════════════════════════════════════════════
    STATE & PERMISSIONS
@@ -432,8 +432,8 @@ const CORRETORES = ["Carlos Lima","Ana Martins","Bruno Teixeira","Luana Ramos"];
 let state = { loggedIn:false, role:"Administrador", section:"painel", filter:{} };
 
 const ROLE_META = {
-  "Administrador":              {icon:"shield",  desc:"Acesso completo ao sistema",         initials:"AP", name:"Ana Paula Ramos"},
-  "Corretor":                   {icon:"star",    desc:"Atendimentos e negociações próprios", initials:"CL", name:"Carlos Lima"},
+  "Administrador":              {icon:"shield",  desc:"Acesso completo ao sistema",         initials:"KS", name:"Karliele de Souza"},
+  "Corretor":                   {icon:"star",    desc:"Atendimentos e negociações próprios", initials:"IB", name:"Isaac Bruno"},
   "Funcionário Administrativo": {icon:"users",   desc:"Cadastros e atendimentos",           initials:"BT", name:"Beatriz Torres"},
   "Cliente":                    {icon:"home",    desc:"Consulta de imóveis e agendamentos", initials:"MF", name:"Maria Fernanda Costa"},
 };
@@ -811,9 +811,9 @@ function renderPainelAdmin() {
 }
 
 function renderPainelCorretor() {
-  const myAtend = DATA.atendimentos.filter(a=>a.corretor==='Carlos Lima');
-  const myNeg   = DATA.negociacoes.filter(n=>n.corretor==='Carlos Lima');
-  const myCli   = DATA.clientes.filter(c=>c.corretor==='Carlos Lima');
+  const myAtend = DATA.atendimentos.filter(a=>a.corretor==='Isaac Bruno');
+  const myNeg   = DATA.negociacoes.filter(n=>n.corretor==='Isaac Bruno');
+  const myCli   = DATA.clientes.filter(c=>c.corretor==='Isaac Bruno');
   return `
   <div class="kpi-grid">
     ${kpiCard("Meus Clientes",myCli.length,"ativos","users",false)}
@@ -1011,7 +1011,7 @@ function confirmDeleteImovel(id) {
 function renderClientes() {
   const can = CAN[state.role];
   if(!can.allClients && state.role!=='Corretor') return renderAccessDenied();
-  const source = state.role==='Corretor' ? DATA.clientes.filter(c=>c.corretor==='Carlos Lima') : DATA.clientes;
+  const source = state.role==='Corretor' ? DATA.clientes.filter(c=>c.corretor==='Isaac Bruno') : DATA.clientes;
   const q = (state.filter.clientesQ||'').toLowerCase();
   const tf = state.filter.clientesTipo||'Todos';
   const tipos = ['Todos','Compradora','Comprador','Locatário','Investidor'];
@@ -1096,7 +1096,7 @@ function viewCliente(id) {
 
 function _clienteFormHTML(c) {
   const sel = (v,opts) => opts.map(o=>`<option${o===v?' selected':''}>${o}</option>`).join('');
-  const corretorOpts = CORRETORES.map(r=>`<option${r===(c?.corretor||'Carlos Lima')?' selected':''}>${r}</option>`).join('');
+  const corretorOpts = CORRETORES.map(r=>`<option${r===(c?.corretor||'Isaac Bruno')?' selected':''}>${r}</option>`).join('');
   return `
   <div class="form-grid">
     <div class="form-field col-2"><label>Nome completo *</label><input id="f-nome" class="form-input" value="${esc(c?.nome||'')}" placeholder="Maria Silva" /></div>
@@ -1159,7 +1159,7 @@ function renderAtendimentos() {
   const can = CAN[state.role];
   const f = state.filter.atend || 'Todos';
   const filters = ['Todos','Agendado','Realizado','Cancelado'];
-  const source = state.role==='Corretor' ? DATA.atendimentos.filter(a=>a.corretor==='Carlos Lima') : DATA.atendimentos;
+  const source = state.role==='Corretor' ? DATA.atendimentos.filter(a=>a.corretor==='Isaac Bruno') : DATA.atendimentos;
   const list = f==='Todos' ? source : source.filter(a=>a.status===f);
 
   const banner = state.role==='Corretor'
@@ -1229,7 +1229,7 @@ function viewAtendimento(id) {
 function _atendFormHTML(a) {
   const sel = (v,opts) => opts.map(o=>`<option${o===v?' selected':''}>${o}</option>`).join('');
   const clienteOpts = DATA.clientes.map(c=>`<option${c.nome===(a?.cliente||'')?' selected':''}>${esc(c.nome)}</option>`).join('');
-  const corretorOpts = CORRETORES.map(r=>`<option${r===(a?.corretor||'Carlos Lima')?' selected':''}>${r}</option>`).join('');
+  const corretorOpts = CORRETORES.map(r=>`<option${r===(a?.corretor||'Isaac Bruno')?' selected':''}>${r}</option>`).join('');
   return `
   <div class="form-grid">
     <div class="form-field col-2"><label>Cliente *</label><select id="f-cliente" class="form-input"><option value="">Selecione…</option>${clienteOpts}</select></div>
@@ -1296,7 +1296,7 @@ function renderNegociacoes() {
   if(!can.allNeg && state.role!=='Corretor') return renderAccessDenied();
   const f = state.filter.neg || 'Todos';
   const filters = ['Todos','Em Proposta','Em Análise','Contrato','Fechada','Cancelada'];
-  const source = state.role==='Corretor' ? DATA.negociacoes.filter(n=>n.corretor==='Carlos Lima') : DATA.negociacoes;
+  const source = state.role==='Corretor' ? DATA.negociacoes.filter(n=>n.corretor==='Isaac Bruno') : DATA.negociacoes;
   const list = f==='Todos' ? source : source.filter(n=>n.etapa===f);
 
   const banner = state.role==='Corretor'
@@ -1367,7 +1367,7 @@ function viewNegociacao(id) {
 function _negFormHTML(n) {
   const sel = (v,opts) => opts.map(o=>`<option${o===v?' selected':''}>${o}</option>`).join('');
   const clienteOpts = DATA.clientes.map(c=>`<option${c.nome===(n?.cliente||'')?' selected':''}>${esc(c.nome)}</option>`).join('');
-  const corretorOpts = CORRETORES.map(r=>`<option${r===(n?.corretor||'Carlos Lima')?' selected':''}>${r}</option>`).join('');
+  const corretorOpts = CORRETORES.map(r=>`<option${r===(n?.corretor||'Isaac Bruno')?' selected':''}>${r}</option>`).join('');
   return `
   <div class="form-grid">
     <div class="form-field col-2"><label>Cliente *</label><select id="f-cliente" class="form-input"><option value="">Selecione…</option>${clienteOpts}</select></div>
